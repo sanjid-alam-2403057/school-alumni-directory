@@ -9,28 +9,33 @@ body {
 }
 
 header {
-    /* The linear-gradient part adds a semi-transparent dark overlay so your white text stays easy to read over the photo */
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/school-bg.jpg');
-    background-size: cover; /* Makes sure the photo covers the whole space */
-    background-position: center; /* Keeps the photo centered */
+    /* WE REMOVED THE linear-gradient (dark shadow) completely! */
+    background-image: url('images/school-bg.jpg'); 
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     color: white;
     text-align: center;
-    padding: 4rem 1rem; /* Made the padding slightly larger so you can see more of your photo */
+    padding: 4rem 1rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+/* Now, we need to make sure the white text is readable against the bright photo */
 header h1 {
     margin: 0;
     font-size: 2.5rem;
     letter-spacing: 1px;
+    font-weight: 600;
+    /* This adds a clean black outline to the text so it is readable on any background */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
 }
 
 header p {
     font-weight: 300;
     font-size: 1.1rem;
-    opacity: 0.9;
     margin-top: 10px;
+    /* We also add a slightly softer shadow to the subtitle text */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 #alumni-container {
