@@ -30,13 +30,24 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.classList.add("alumni-card");
 
+           // 1. Check if they are a mentor to show the star badge
+            const mentorBadge = alumnus.isMentor ? `<div class="badge mentor-badge">🌟 Mentor</div>` : "";
+            
+            // 2. The bot-proof email button! It glues the email back together when clicked.
+            const contactButton = (alumnus.emailUser && alumnus.emailDomain) ? 
+                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
+                : "";
+
             card.innerHTML = `
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
+                ${mentorBadge}
                 <p><strong>University:</strong> ${alumnus.university}</p>
                 <p><strong>Department:</strong> ${alumnus.department}</p>
                 <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
                 <div class="badge">SSC Batch: ${alumnus.sscBatch}</div>
+                <br>
+                ${contactButton}
             `;
 
             container.appendChild(card);
