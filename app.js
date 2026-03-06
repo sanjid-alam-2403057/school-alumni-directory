@@ -69,4 +69,26 @@ document.addEventListener("DOMContentLoaded", () => {
         currentDisplayData.sort((a, b) => b.sscBatch - a.sscBatch);
         displayAlumni(currentDisplayData);
     });
+    // --- NEW: Dark Mode Logic ---
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const body = document.body;
+
+    // Check if the user previously chose dark mode
+    if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark-mode");
+        darkModeToggle.textContent = "☀️"; 
+    }
+
+    // Listen for the click
+    darkModeToggle.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+        
+        if (body.classList.contains("dark-mode")) {
+            darkModeToggle.textContent = "☀️";
+            localStorage.setItem("theme", "dark");
+        } else {
+            darkModeToggle.textContent = "🌙";
+            localStorage.setItem("theme", "light");
+        }
+    });
 });
