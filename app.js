@@ -1,20 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("alumni-container");
     const searchInput = document.getElementById("searchInput");
+    const sortNameBtn = document.getElementById("sortName");
+    const sortBatchBtn = document.getElementById("sortBatch");
+    
     let alumniData = [];
+    let currentDisplayData = []; // This tracks the currently visible cards
 
     // Fetch the alumni data
     fetch("data.json")
         .then(response => response.json())
         .then(data => {
             alumniData = data;
-            displayAlumni(alumniData); // Show all alumni initially
+            currentDisplayData = [...alumniData]; // Copy original data
+            displayAlumni(currentDisplayData); // Show all alumni initially
         })
         .catch(error => console.error("Error loading alumni data:", error));
 
     // Function to create and display cards
     function displayAlumni(data) {
-        container.innerHTML = ""; // Clear out old cards before loading new ones
+        container.innerHTML = ""; // Clear out old cards
 
         if (data.length === 0) {
             container.innerHTML = "<p style='text-align:center; color:#666; width:100%;'>No alumni found matching your search.</p>";
@@ -25,13 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.classList.add("alumni-card");
 
-            // Clean, professional HTML without the emojis
             card.innerHTML = `
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
                 <p><strong>University:</strong> ${alumnus.university}</p>
                 <p><strong>Department:</strong> ${alumnus.department}</p>
-                <p><strong>Admission Year:</strong> ${alumnus.admissionYear}</p>
+                <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
                 <div class="badge">SSC Batch: ${alumnus.sscBatch}</div>
             `;
 
@@ -43,13 +47,26 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.addEventListener("input", (e) => {
         const searchString = e.target.value.toLowerCase();
         
-        // Filter the data based on name, university, or SSC batch
-        const filteredAlumni = alumniData.filter(alumnus => {
+        currentDisplayData = alumniData.filter(alumnus => {
             return alumnus.name.toLowerCase().includes(searchString) ||
                    alumnus.university.toLowerCase().includes(searchString) ||
                    alumnus.sscBatch.toString().includes(searchString);
         });
         
-        displayAlumni(filteredAlumni); // Display only the matching cards
+        displayAlumni(currentDisplayData); 
+    });
+
+    // --- NEW: Sorting Logic ---
+
+    // Sort by Name (Alphabetical A-Z)
+    sortNameBtn.addEventListener("click", () => {
+        currentDisplayData.sort((a, b) => a.name.localeCompare(b.name));
+        displayAlumni(currentDisplayData);
+    });
+
+    // Sort by Newest Batch (Highest number first)
+    sortBatchBtn.addEventListener("click", () => {
+        currentDisplayData.sort((a, b) => b.sscBatch - a.sscBatch);
+        displayAlumni(currentDisplayData);
     });
 });
