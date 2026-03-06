@@ -87,3 +87,31 @@ header p {
     color: #004aad; 
     font-weight: 600;
 }
+/* Search Bar Styling */
+.search-container {
+    margin-top: 25px;
+}
+
+#searchInput {
+    width: 90%;
+    max-width: 450px;
+    padding: 14px 20px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Badge Styling for SSC Batch */
+.badge {
+    background-color: #e0f2fe; 
+    color: #0369a1; 
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 12px;
+}
