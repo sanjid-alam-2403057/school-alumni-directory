@@ -50,14 +50,13 @@ header p {
 
 .alumni-card {
     background: white;
-    border-radius: 16px; /* Smoother, rounder corners */
+    border-radius: 16px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    width: 280px; /* Slightly wider to fit long university names better */
-    padding: 25px 20px;
+    width: 240px; /* <-- SHRUNK from 280px */
+    padding: 20px 15px; /* <-- Slightly less padding to match the new size */
     text-align: center;
-    /* This adds a smooth animation when you hover over the card */
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
-    border-top: 5px solid #004aad; /* A nice color accent at the top of the card */
+    border-top: 5px solid #004aad; 
 }
 
 /* Hover effect: makes the card lift up and cast a bigger shadow */
@@ -67,27 +66,26 @@ header p {
 }
 
 .alumni-card img {
-    width: 130px;
-    height: 130px;
+    width: 100px;  /* <-- SHRUNK from 130px */
+    height: 100px; /* <-- SHRUNK from 130px */
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 15px;
-    /* Adds a nice frame and inner shadow to the photo */
-    border: 4px solid white; 
+    margin-bottom: 12px;
+    border: 3px solid white; 
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .alumni-card h2 {
-    font-size: 1.4rem;
-    margin: 0 0 15px;
+    font-size: 1.2rem; /* <-- Slightly smaller font for the name */
+    margin: 0 0 10px;
     color: #1a1a1a;
 }
 
 .alumni-card p {
     color: #444;
-    margin: 8px 0;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    margin: 6px 0;
+    font-size: 0.85rem; /* <-- Slightly smaller text for the details */
+    line-height: 1.3;
 }
 
 /* Makes the labels (University, Department, etc.) stand out */
