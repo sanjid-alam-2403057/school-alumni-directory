@@ -34,7 +34,7 @@ header p {
     font-weight: 300;
     font-size: 1.1rem;
     margin-top: 10px;
-    color: #e2e8f0; /* <-- THIS CHANGES THE SUBTITLE COLOR (Light Silver) */
+    color: #f59e0b; /* <-- THIS CHANGES THE SUBTITLE COLOR (Amber/Gold) */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
