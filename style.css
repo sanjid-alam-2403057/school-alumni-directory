@@ -9,7 +9,6 @@ body {
 }
 
 header {
-    /* WE REMOVED THE linear-gradient (dark shadow) completely! */
     background-image: url('images/school-bg.jpg'); 
     background-size: cover;
     background-position: center;
@@ -18,6 +17,7 @@ header {
     text-align: center;
     padding: 4rem 1rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative; /* <-- YOU ONLY NEED TO ADD THIS ONE LINE! */
 }
 
 /* Now, we need to make sure the white text is readable against the bright photo */
@@ -122,4 +122,85 @@ header p {
     font-weight: 600;
     display: inline-block;
     margin-top: 12px;
+}
+/* --- NEW FEATURES STYLING --- */
+
+/* Join Button Pinned to Top Right */
+.join-btn {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    background-color: #f59e0b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.join-btn:hover {
+    background-color: #d97706;
+    transform: translateY(-2px);
+}
+
+/* Styles the new SVG icon */
+.join-icon {
+    width: 18px;
+    height: 18px;
+    fill: white; /* Makes the icon color match the text */
+}
+
+/* Smart Mobile Fix: If someone views it on a tiny phone screen, put the button back in the center so it doesn't overlap your title! */
+@media (max-width: 600px) {
+    .join-btn {
+        position: static;
+        display: inline-flex;
+        margin-bottom: 25px;
+    }
+}
+
+/* Footer Styling */
+footer {
+    background-color: #1f2937; /* Clean dark gray */
+    color: #d1d5db;
+    text-align: center;
+    padding: 30px 10px;
+    margin-top: 50px;
+    border-top: 4px solid #004aad; /* Blue accent line at the top of footer */
+}
+
+.footer-content p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+/* Sort Buttons Styling */
+.sort-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.sort-btn {
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    color: white;
+    border: 1px solid white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.sort-btn:hover {
+    background-color: white;
+    color: #111;
 }
