@@ -23,7 +23,7 @@ header {
 /* Now, we need to make sure the text is readable against the bright photo */
 header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 1.7rem;
     letter-spacing: 1px;
     font-weight: 600;
     color: #f59e0b; /* <-- THIS CHANGES THE TITLE COLOR (Amber/Gold) */
@@ -32,7 +32,7 @@ header h1 {
 
 header p {
     font-weight: 600;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-top: 10px;
     color: #f59e0b; /* <-- THIS CHANGES THE SUBTITLE COLOR (Light Silver) */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
