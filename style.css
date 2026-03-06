@@ -20,22 +20,22 @@ header {
     position: relative; /* <-- YOU ONLY NEED TO ADD THIS ONE LINE! */
 }
 
-/* Now, we need to make sure the white text is readable against the bright photo */
+/* Now, we need to make sure the text is readable against the bright photo */
 header h1 {
     margin: 0;
     font-size: 2.5rem;
     letter-spacing: 1px;
     font-weight: 600;
-    /* This adds a clean black outline to the text so it is readable on any background */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); 
+    color: #f59e0b; /* <-- THIS CHANGES THE TITLE COLOR (Amber/Gold) */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); 
 }
 
 header p {
     font-weight: 300;
     font-size: 1.1rem;
     margin-top: 10px;
-    /* We also add a slightly softer shadow to the subtitle text */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    color: #e2e8f0; /* <-- THIS CHANGES THE SUBTITLE COLOR (Light Silver) */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 #alumni-container {
@@ -202,3 +202,51 @@ footer {
     background-color: white;
     color: #111;
 }
+/* --- DARK MODE BUTTON STYLING --- */
+.dark-mode-btn {
+    position: absolute;
+    top: 25px;
+    right: 180px; /* Sits right next to the Add Profile button */
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.2s;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.dark-mode-btn:hover {
+    background-color: white;
+    transform: scale(1.1);
+}
+
+@media (max-width: 600px) {
+    .dark-mode-btn {
+        position: static;
+        display: inline-block;
+        margin-bottom: 25px;
+        margin-right: 10px;
+    }
+}
+
+/* --- THE DARK MODE THEME --- */
+body.dark-mode {
+    background-color: #111827; /* Dark background */
+    color: #f3f4f6;
+}
+
+body.dark-mode .alumni-card {
+    background: #1f2937; /* Dark cards */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    border-top: 5px solid #3b82f6; 
+}
+
+body.dark-mode .alumni-card h2 { color: #f9fafb; }
+body.dark-mode .alumni-card p { color: #d1d5db; }
+body.dark-mode .alumni-card strong { color: #60a5fa; }
+body.dark-mode .alumni-card img { border-color: #1f2937; }
+body.dark-mode .badge { background-color: #374151; color: #93c5fd; }
+body.dark-mode footer { background-color: #0f172a; border-top: 4px solid #3b82f6; }
