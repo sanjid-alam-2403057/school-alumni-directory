@@ -24,19 +24,19 @@
     "photo": "images/shihab.jpg"
   },
    {
-    "name": "Nazrul Islam Nafis",
-    "university": "University of Dhaka",
-    "department": "Economics",
-    "admissionYear": 2026,
-    "sscBatch": 2023,
-    "photo": "images/nafis.jpg"
-  },
-  {
     "name": "Jannatul Mawya",
     "university": "Comilla University",
     "department": "Finance",
     "admissionYear": 2026,
     "sscBatch": 2023,
     "photo": "images/mawya.jpg"
+  },
+   {
+    "name": "Nazrul Islam Nafis",
+    "university": "University of Dhaka",
+    "department": "Economics",
+    "admissionYear": 2026,
+    "sscBatch": 2023,
+    "photo": "images/nafis.jpg"
   }
 ]
