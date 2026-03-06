@@ -9,11 +9,14 @@ body {
 }
 
 header {
-    /* A sleek blue gradient instead of a flat color */
-    background: linear-gradient(135deg, #004aad, #00b4db); 
+    /* The linear-gradient part adds a semi-transparent dark overlay so your white text stays easy to read over the photo */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/school-bg.jpg');
+    background-size: cover; /* Makes sure the photo covers the whole space */
+    background-position: center; /* Keeps the photo centered */
+    background-repeat: no-repeat;
     color: white;
     text-align: center;
-    padding: 3rem 1rem;
+    padding: 4rem 1rem; /* Made the padding slightly larger so you can see more of your photo */
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
