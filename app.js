@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h2>${alumnus.name}</h2>
                 <p><strong>University:</strong> ${alumnus.university}</p>
                 <p><strong>Department:</strong> ${alumnus.department}</p>
-                <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
+                <p><strong>Admission Year:</strong> ${alumnus.admissionYear}</p>
                 <div class="badge">SSC Batch: ${alumnus.sscBatch}</div>
             `;
 
