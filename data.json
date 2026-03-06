@@ -1,4 +1,12 @@
 [
+   {
+    "name": "Sanzida Alam",
+    "university": "University of Chittagong",
+    "department": "English",
+    "admissionYear": 2019,
+    "sscBatch": 2016,
+    "photo": "images/sanzida.jpg"
+  },
   {
     "name": "Sanjid Alam",
     "university": "Rajshahi University of Engineering & Technology",
