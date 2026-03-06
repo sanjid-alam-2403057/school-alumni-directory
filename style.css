@@ -44,6 +44,7 @@ header {
 }
 
 .alumni-card p {
-    color: #666;
-    margin: 5px 0;
+    color: #555;
+    margin: 6px 0;
+    font-size: 0.9rem;
 }
