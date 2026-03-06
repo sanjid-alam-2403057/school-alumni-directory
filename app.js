@@ -10,11 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const card = document.createElement("div");
                 card.classList.add("alumni-card");
 
+                // Inject the new data fields into the HTML
                 card.innerHTML = `
                     <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                     <h2>${alumnus.name}</h2>
-                    <p><strong>Class of:</strong> ${alumnus.graduationYear}</p>
-                    <p>${alumnus.profession}</p>
+                    <p><strong>University:</strong> ${alumnus.university}</p>
+                    <p><strong>Department:</strong> ${alumnus.department}</p>
+                    <p><strong>Admission Year:</strong> ${alumnus.admissionYear}</p>
+                    <p><strong>SSC Batch:</strong> ${alumnus.sscBatch}</p>
                 `;
 
                 container.appendChild(card);
