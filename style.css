@@ -1,50 +1,89 @@
+/* Import a beautiful modern font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f4f8; /* A softer, more premium background color */
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: #004aad;
+    /* A sleek blue gradient instead of a flat color */
+    background: linear-gradient(135deg, #004aad, #00b4db); 
     color: white;
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 3rem 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
+header p {
+    font-weight: 300;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-top: 10px;
 }
 
 #alumni-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    gap: 30px; /* Gives the cards a bit more breathing room */
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .alumni-card {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 250px;
-    padding: 15px;
+    border-radius: 16px; /* Smoother, rounder corners */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    width: 280px; /* Slightly wider to fit long university names better */
+    padding: 25px 20px;
     text-align: center;
+    /* This adds a smooth animation when you hover over the card */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    border-top: 5px solid #004aad; /* A nice color accent at the top of the card */
+}
+
+/* Hover effect: makes the card lift up and cast a bigger shadow */
+.alumni-card:hover {
+    transform: translateY(-8px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15); 
 }
 
 .alumni-card img {
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 15px;
+    /* Adds a nice frame and inner shadow to the photo */
+    border: 4px solid white; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .alumni-card h2 {
-    font-size: 1.2rem;
-    margin: 0 0 5px;
-    color: #333;
+    font-size: 1.4rem;
+    margin: 0 0 15px;
+    color: #1a1a1a;
 }
 
 .alumni-card p {
-    color: #555;
-    margin: 6px 0;
+    color: #444;
+    margin: 8px 0;
     font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Makes the labels (University, Department, etc.) stand out */
+.alumni-card strong {
+    color: #004aad; 
+    font-weight: 600;
 }
