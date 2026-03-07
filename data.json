@@ -104,6 +104,19 @@
     "whatsappNum": "1742216801",
       "mentoring": true
   },
+   {
+    "name": "Abu Bakar Siddik",
+    "university": "Bangladesh University of Business and technology (BUBT)",
+    "department": "Law",
+    "admissionYear": 2026,
+    "sscBatch": 2023,
+    "photo": "images/milon.jpeg",
+      "emailUser": "absmilon1446", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "isNew": true
+      
+  },
     {
     "name": "MD Al Amin",
     "college": "Nawab Faizunnessa Govt Collage",
