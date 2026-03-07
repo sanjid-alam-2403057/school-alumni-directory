@@ -47,7 +47,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
                 : "";
 
+// Email Button
+            const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
+                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
+                : "";
+
+            // WhatsApp Button
+            const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
+            const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
+                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
+                : "";
+
+            // NEW: The Mentoring Badge
+            const mentoringBadge = alumnus.mentoring ? 
+                `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` 
+                : "";
+
             card.innerHTML = `
+                ${mentoringBadge}
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
                 <p><strong>University:</strong> ${alumnus.university}</p>
