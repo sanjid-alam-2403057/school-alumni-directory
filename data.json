@@ -103,5 +103,18 @@
     "whatsappCode": "880",
     "whatsappNum": "1742216801",
       "mentoring": true
+  },
+    {
+    "name": "MD Al Amin",
+    "college": "Nawab Faizunnessa Govt Collage",
+    "group": "Science",
+    "admissionYear": 2026,
+    "sscBatch": 2023,
+    "photo": "images/amin.jpg",
+      "emailUser": "mdalaminfahad2006", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1799238312"
+     
   }
 ]
