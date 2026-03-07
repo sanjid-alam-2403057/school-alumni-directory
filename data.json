@@ -66,8 +66,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1619088307",
-       "mentoring": true,
-        "isNew": true
+       "mentoring": true
+      
   },
    {
     "name": "Md.Rashedul Islam",
@@ -80,8 +80,7 @@
     "emailDomain": "gmail.com",
     "phoneCode": "+880",
     "phoneNum": "1616564479",
-       "mentoring": true,
-       "isNew": true
+       "mentoring": true
       
   },
    {
@@ -95,8 +94,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1757790817",
-     "mentoring": true,
-       "isNew": true
+     "mentoring": true
+    
     
   },
   {
@@ -139,8 +138,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "130144357",
-      "mentoring": true,
-       "isNew": true
+      "mentoring": true
+       
   },
    {
     "name": "Jannatul Mawya",
@@ -182,8 +181,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1516521446",  
-      "mentoring": true,
-      "isNew": true
+      "mentoring": true
       },
     {
     "name": "MD Al Amin",
@@ -196,8 +194,6 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1799238312",
-      "mentoring": true,
-        "isNew": true
-     
+      "mentoring": true
   }
 ]
