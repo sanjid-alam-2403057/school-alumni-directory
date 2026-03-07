@@ -379,3 +379,60 @@ body.dark-mode .desktop-notice {
         display: none !important;
     }
 }
+/* --- LIVE DASHBOARD STATS BAR --- */
+.stats-dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    background-color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 140px;
+    transition: transform 0.3s;
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #004aad; /* Matches your brand blue */
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Dark Mode logic for the dashboard */
+body.dark-mode .stat-box {
+    background-color: #1e293b;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .stat-number {
+    color: #3b82f6; /* Brighter blue for visibility on dark backgrounds */
+}
+
+body.dark-mode .stat-label {
+    color: #cbd5e1;
+}
