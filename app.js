@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${emailButton}
                     ${whatsappButton}
                 </div>
+                <button class="share-btn" onclick="shareProfile(this, '${alumnus.name}', '${alumnus.university}')">🔗 Share Profile</button>
             `;
 
             container.appendChild(card);
@@ -163,3 +164,28 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("total-departments").textContent = uniqueDepartments;
     }
 });
+// --- NEW: Global Share Function ---
+window.shareProfile = function(buttonElement, name, university) {
+    // Gets your current website URL
+    const websiteUrl = window.location.href.split('?')[0]; 
+    
+    // The text that gets copied to their clipboard
+    const textToCopy = `Check out ${name} from ${university} on our Alumni Directory! ${websiteUrl}`;
+    
+    // Copies the text, then changes the button to say "Copied!"
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = buttonElement.innerHTML;
+        buttonElement.innerHTML = "✅ Copied!";
+        buttonElement.style.backgroundColor = "#25D366";
+        buttonElement.style.color = "white";
+        buttonElement.style.borderColor = "#25D366";
+        
+        // Changes it back to normal after 2 seconds
+        setTimeout(() => {
+            buttonElement.innerHTML = originalText;
+            buttonElement.style.backgroundColor = "";
+            buttonElement.style.color = "";
+            buttonElement.style.borderColor = "";
+        }, 2000);
+    });
+};
