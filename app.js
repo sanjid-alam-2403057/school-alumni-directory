@@ -7,13 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let alumniData = [];
     let currentDisplayData = []; // This tracks the currently visible cards
 
-    // Fetch the alumni data
+  // Fetch the alumni data
     fetch("data.json")
         .then(response => response.json())
         .then(data => {
             alumniData = data;
-            currentDisplayData = [...alumniData]; // Copy original data
-            displayAlumni(currentDisplayData); // Show all alumni initially
+            currentDisplayData = [...alumniData]; 
+            displayAlumni(currentDisplayData); 
+            updateDashboard(alumniData); // <-- NEW: Calculates stats on load!
         })
         .catch(error => console.error("Error loading alumni data:", error));
 
@@ -141,5 +142,21 @@ document.addEventListener("DOMContentLoaded", () => {
         closeNoticeBtn.addEventListener("click", () => {
             desktopNotice.style.display = "none";
         });
+    }
+    // --- NEW: Live Dashboard Calculator ---
+    function updateDashboard(data) {
+        // 1. Count total alumni
+        const totalAlumni = data.length;
+        
+        // 2. Find unique universities using a Set
+        const uniqueUniversities = new Set(data.map(alumnus => alumnus.university)).size;
+        
+        // 3. Find unique departments using a Set
+        const uniqueDepartments = new Set(data.map(alumnus => alumnus.department)).size;
+
+        // 4. Update the HTML with the numbers
+        document.getElementById("total-alumni").textContent = totalAlumni;
+        document.getElementById("total-universities").textContent = uniqueUniversities;
+        document.getElementById("total-departments").textContent = uniqueDepartments;
     }
 });
