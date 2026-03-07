@@ -281,3 +281,31 @@ body.dark-mode .scroll-top-btn {
 body.dark-mode .scroll-top-btn:hover {
     background-color: #2563eb;
 }
+/* --- WHATSAPP BUTTON --- */
+.whatsapp-btn {
+    background-color: #25D366; /* Official WhatsApp Green */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.whatsapp-btn:hover {
+    background-color: #128C7E; /* Darker green for hover */
+    transform: translateY(-2px);
+}
+
+/* Grouping the buttons nicely together */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Puts a little space between Email and WhatsApp */
+    flex-wrap: wrap;
+}
