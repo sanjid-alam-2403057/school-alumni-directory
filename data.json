@@ -52,6 +52,20 @@
        "isNew": true,
        "mentoring": true
   },
+    {
+    "name": "Taslima Tarin",
+    "college": "Tejgaon College",
+    "department": "Botany",
+    "admissionYear": 2023,
+    "sscBatch": 2020,
+    "photo": "images/tarin.png",
+   "emailUser": "taslimatarin207", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1619088307",
+       "isNew": true,
+       "mentoring": true
+  },
    {
     "name": "Md.Rashedul Islam",
     "university": "National University, Comilla Victoria Collage",
@@ -62,9 +76,24 @@
    "emailUser": "rashedulislam1705", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "'1616564479",
+    "whatsappNum": "1616564479",
        "isNew": true,
        "mentoring": true
+  },
+   {
+    "name": "Billal Hossen",
+    "university": "National university",
+    "department": "Philosophy",
+    "admissionYear": 2024,
+    "sscBatch": 2021,
+    "photo": "images/billal.jpg",
+   "emailUser": "billalhossen0817", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1757790817",
+     "mentoring": true,
+       "isNew": true
+    
   },
   {
     "name": "Sanjid Alam",
