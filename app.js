@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let alumniData = [];
     let currentDisplayData = []; 
     
-    let itemsPerPage = 6; 
+    let itemsPerPage = 12; 
     let currentlyShowing = itemsPerPage;
 
     fetch("data.json")
