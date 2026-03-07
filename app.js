@@ -133,4 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
             behavior: "smooth"
         });
     });
+    // --- NEW: Close Desktop Notice Banner ---
+    const desktopNotice = document.getElementById("desktop-notice");
+    const closeNoticeBtn = document.getElementById("closeNoticeBtn");
+
+    if (closeNoticeBtn) {
+        closeNoticeBtn.addEventListener("click", () => {
+            desktopNotice.style.display = "none";
+        });
+    }
 });
