@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentDisplayData = []; 
     
     // Pagination Variables for the Load More feature
-    let itemsPerPage = 6; 
+    let itemsPerPage = 8; 
     let currentlyShowing = itemsPerPage;
 
     // Fetch the alumni data
