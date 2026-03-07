@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let alumniData = [];
     let currentDisplayData = []; 
     
+    // Set to 12 cards before "Load More" appears!
     let itemsPerPage = 12; 
     let currentlyShowing = itemsPerPage;
 
@@ -45,6 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
                 : "";
 
+            // NEW: Regular Phone Call Button
+            const callButton = (alumnus.phoneCode && alumnus.phoneNum) ? 
+                `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` 
+                : "";
+
             const mentoringBadge = alumnus.mentoring ? 
                 `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` 
                 : "";
@@ -53,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<div class="new-badge">✨ NEW</div>` 
                 : "";
 
-            // NEW: Smart Labels that switch between University/College and Department/Group
             const institutionLabel = alumnus.university ? "University" : "College";
             const institutionValue = alumnus.university || alumnus.college || "N/A";
             
@@ -73,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="button-group">
                     ${emailButton}
                     ${whatsappButton}
+                    ${callButton}
                 </div>
                 <button class="share-btn" onclick="shareProfile(this, '${alumnus.name}', '${institutionValue}')">🔗 Share Profile</button>
             `;
@@ -100,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const searchString = e.target.value.toLowerCase();
         
         currentDisplayData = alumniData.filter(alumnus => {
-            // NEW: Safely checks both university and college so it doesn't crash!
             const institution = (alumnus.university || alumnus.college || "").toLowerCase();
             const name = (alumnus.name || "").toLowerCase();
             const batch = (alumnus.sscBatch || "").toString();
@@ -174,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateDashboard(data) {
         const totalAlumni = data.length;
-        // NEW: Combines both Universities and Colleges to get the total unique number
         const uniqueInstitutions = new Set(data.map(a => a.university || a.college).filter(Boolean)).size;
         const uniqueStudy = new Set(data.map(a => a.department || a.group).filter(Boolean)).size;
 
