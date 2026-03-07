@@ -14,6 +14,10 @@
     "admissionYear": 2023,
     "sscBatch": 2020,
     "photo": "images/yasin.jpeg"
+   "emailUser": "Arafat01540", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1740565992"
   },
   {
     "name": "Sanjid Alam",
@@ -22,7 +26,7 @@
     "admissionYear": 2025,
     "sscBatch": 2022,
     "photo": "images/sanjid.jpg",
-     "emailUser": "sanjid01313", 
+   "emailUser": "sanjid01313", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1863232179"
