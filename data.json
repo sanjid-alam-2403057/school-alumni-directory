@@ -42,11 +42,13 @@
     "department": "Statistics",
     "admissionYear": 2023,
     "sscBatch": 2020,
-    "photo": "images/shuvo.jpeg",
+    "photo": "images/shuvo.png",
    "emailUser": "kefayet13913", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1842233076"
+    "whatsappNum": "1842233076",
+       "isNew": true,
+       "mentoring": true
   },
   {
     "name": "Sanjid Alam",
