@@ -616,3 +616,22 @@ body.dark-mode .load-more-btn {
 body.dark-mode .load-more-btn:hover {
     background-color: #2563eb;
 }
+/* --- PUBLIC UNIVERSITY TAG --- */
+.public-badge {
+    display: inline-block;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: middle;
+    border: 1px solid #bfdbfe;
+}
+
+body.dark-mode .public-badge {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+    border-color: #1e40af;
+}
