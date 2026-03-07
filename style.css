@@ -640,3 +640,24 @@ body.dark-mode .public-badge {
     color: #93c5fd;
     border-color: #1e40af;
 }
+/* --- VIP DEVELOPER CARD --- */
+.developer-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #FFD700, #F5A623); /* Premium Gold Gradient */
+    color: #0f172a;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.developer-card {
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+body.dark-mode .developer-card {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
