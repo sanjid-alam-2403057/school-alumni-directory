@@ -5,7 +5,11 @@
     "department": "English",
     "admissionYear": 2019,
     "sscBatch": 2016,
-    "photo": "images/sanzida.jpeg"
+    "photo": "images/sanzida.jpeg",
+   "emailUser": "sanzidaalam56", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1725160194"
   },
    {
     "name": "Md Yasin Arafat",
@@ -37,7 +41,11 @@
     "department": "Computer Science and Engineering",
     "admissionYear": 2025,
     "sscBatch": 2022,
-    "photo": "images/shihab.jpg"
+    "photo": "images/shihab.jpg",
+      "emailUser": "shihab16965", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1763899713"
   },
    {
     "name": "Jannatul Mawya",
@@ -45,7 +53,11 @@
     "department": "Finance",
     "admissionYear": 2026,
     "sscBatch": 2023,
-    "photo": "images/mawya.jpg"
+    "photo": "images/mawya.jpg",
+   "emailUser": "jannatulmawya341", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1347188043"
   },
    {
     "name": "Nazrul Islam Nafis",
@@ -53,6 +65,10 @@
     "department": "Economics",
     "admissionYear": 2026,
     "sscBatch": 2023,
-    "photo": "images/nafis.jpg"
+    "photo": "images/nafis.jpg",
+      "emailUser": "nazrulislamnafis7", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1347188043"
   }
 ]
