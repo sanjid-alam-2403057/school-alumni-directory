@@ -57,6 +57,7 @@ header p {
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
     border-top: 5px solid #004aad; 
+    position: relative;
 }
 
 /* Hover effect: makes the card lift up and cast a bigger shadow */
@@ -435,4 +436,43 @@ body.dark-mode .stat-number {
 
 body.dark-mode .stat-label {
     color: #cbd5e1;
+}
+/* --- OPEN TO MENTORING BADGE --- */
+.mentoring-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: rgba(37, 211, 102, 0.1); /* Very transparent green */
+    color: #128C7E; /* Dark WhatsApp green */
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(37, 211, 102, 0.4);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.glow-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #25D366;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #25D366;
+    animation: pulse 1.5s infinite alternate;
+}
+
+/* The pulsing animation effect */
+@keyframes pulse {
+    0% { transform: scale(0.9); box-shadow: 0 0 4px #25D366; opacity: 0.8; }
+    100% { transform: scale(1.2); box-shadow: 0 0 12px #25D366; opacity: 1; }
+}
+
+/* Dark mode adjustment for the badge */
+body.dark-mode .mentoring-badge {
+    background-color: rgba(37, 211, 102, 0.15);
+    color: #25D366;
+    border-color: #25D366;
 }
