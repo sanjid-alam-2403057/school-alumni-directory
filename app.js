@@ -3,71 +3,70 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("searchInput");
     const sortNameBtn = document.getElementById("sortName");
     const sortBatchBtn = document.getElementById("sortBatch");
-    const loadMoreBtn = document.getElementById("loadMoreBtn"); // The new Load More button
+    const loadMoreBtn = document.getElementById("loadMoreBtn"); 
     
     let alumniData = [];
     let currentDisplayData = []; 
     
-    // Pagination Variables for the Load More feature
-    let itemsPerPage = 8; 
+    let itemsPerPage = 6; 
     let currentlyShowing = itemsPerPage;
 
-    // Fetch the alumni data
     fetch("data.json")
         .then(response => response.json())
         .then(data => {
             alumniData = data;
             currentDisplayData = [...alumniData]; 
             displayAlumni(currentDisplayData); 
-            updateDashboard(alumniData); // Calculates stats on load
+            updateDashboard(alumniData); 
         })
         .catch(error => console.error("Error loading alumni data:", error));
 
-    // Function to create and display cards
     function displayAlumni(data) {
-        container.innerHTML = ""; // Clear out old cards
+        container.innerHTML = ""; 
 
         if (data.length === 0) {
             container.innerHTML = "<p style='text-align:center; color:#666; width:100%;'>No alumni found matching your search.</p>";
-            if(loadMoreBtn) loadMoreBtn.style.display = "none"; // Hide button if no results
+            if(loadMoreBtn) loadMoreBtn.style.display = "none"; 
             return;
         }
 
-        // Only slice the amount of data we want to show!
         const dataToShow = data.slice(0, currentlyShowing);
 
         dataToShow.forEach(alumnus => {
             const card = document.createElement("div");
             card.classList.add("alumni-card");
             
-            // 1. Bot-proof email button
             const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
                 `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
                 : "";
 
-            // 2. WhatsApp button
             const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
             const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
                 `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
                 : "";
 
-            // 3. Mentoring Badge
             const mentoringBadge = alumnus.mentoring ? 
                 `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` 
                 : "";
 
-            // 4. NEW: The New Arrival Badge
             const newArrivalBadge = alumnus.isNew ? 
                 `<div class="new-badge">✨ NEW</div>` 
                 : "";
+
+            // NEW: Smart Labels that switch between University/College and Department/Group
+            const institutionLabel = alumnus.university ? "University" : "College";
+            const institutionValue = alumnus.university || alumnus.college || "N/A";
+            
+            const studyLabel = alumnus.department ? "Department" : "Group";
+            const studyValue = alumnus.department || alumnus.group || "N/A";
 
             card.innerHTML = `
                 ${newArrivalBadge}
                 ${mentoringBadge}
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
-                <p><strong>University:</strong> ${alumnus.university}</p>
-                <p><strong>Department:</strong> ${alumnus.department}</p>
+                <p><strong>${institutionLabel}:</strong> ${institutionValue}</p>
+                <p><strong>${studyLabel}:</strong> ${studyValue}</p>
                 <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
                 <div class="badge">SSC Batch: ${alumnus.sscBatch}</div>
                 <br>
@@ -75,13 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${emailButton}
                     ${whatsappButton}
                 </div>
-                <button class="share-btn" onclick="shareProfile(this, '${alumnus.name}', '${alumnus.university}')">🔗 Share Profile</button>
+                <button class="share-btn" onclick="shareProfile(this, '${alumnus.name}', '${institutionValue}')">🔗 Share Profile</button>
             `;
 
             container.appendChild(card);
         });
 
-        // Decide whether to show or hide the Load More button
         if (loadMoreBtn) {
             if (currentlyShowing < data.length) {
                 loadMoreBtn.style.display = "inline-block";
@@ -91,43 +89,43 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Load More Button Click Event
     if(loadMoreBtn) {
         loadMoreBtn.addEventListener("click", () => {
-            currentlyShowing += itemsPerPage; // Add 6 more to the limit
-            displayAlumni(currentDisplayData); // Redraw the cards
+            currentlyShowing += itemsPerPage; 
+            displayAlumni(currentDisplayData); 
         });
     }
 
-    // Live search functionality
     searchInput.addEventListener("input", (e) => {
         const searchString = e.target.value.toLowerCase();
         
         currentDisplayData = alumniData.filter(alumnus => {
-            return alumnus.name.toLowerCase().includes(searchString) ||
-                   alumnus.university.toLowerCase().includes(searchString) ||
-                   alumnus.sscBatch.toString().includes(searchString);
+            // NEW: Safely checks both university and college so it doesn't crash!
+            const institution = (alumnus.university || alumnus.college || "").toLowerCase();
+            const name = (alumnus.name || "").toLowerCase();
+            const batch = (alumnus.sscBatch || "").toString();
+
+            return name.includes(searchString) ||
+                   institution.includes(searchString) ||
+                   batch.includes(searchString);
         });
         
-        currentlyShowing = itemsPerPage; // Reset to 6 cards when searching!
+        currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData); 
     });
 
-    // Sort by Name (Alphabetical A-Z)
     sortNameBtn.addEventListener("click", () => {
         currentDisplayData.sort((a, b) => a.name.localeCompare(b.name));
-        currentlyShowing = itemsPerPage; // Reset to 6 cards when sorting!
+        currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData);
     });
 
-    // Sort by Newest Batch (Highest number first)
     sortBatchBtn.addEventListener("click", () => {
         currentDisplayData.sort((a, b) => b.sscBatch - a.sscBatch);
-        currentlyShowing = itemsPerPage; // Reset to 6 cards when sorting!
+        currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData);
     });
 
-    // Dark Mode Logic
     const darkModeToggle = document.getElementById("darkModeToggle");
     const body = document.body;
 
@@ -148,7 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Scroll to Top Logic
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
     window.addEventListener("scroll", () => {
@@ -166,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Close Desktop Notice Banner
     const desktopNotice = document.getElementById("desktop-notice");
     const closeNoticeBtn = document.getElementById("closeNoticeBtn");
 
@@ -176,22 +172,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Live Dashboard Calculator
     function updateDashboard(data) {
         const totalAlumni = data.length;
-        const uniqueUniversities = new Set(data.map(alumnus => alumnus.university)).size;
-        const uniqueDepartments = new Set(data.map(alumnus => alumnus.department)).size;
+        // NEW: Combines both Universities and Colleges to get the total unique number
+        const uniqueInstitutions = new Set(data.map(a => a.university || a.college).filter(Boolean)).size;
+        const uniqueStudy = new Set(data.map(a => a.department || a.group).filter(Boolean)).size;
 
         document.getElementById("total-alumni").textContent = totalAlumni;
-        document.getElementById("total-universities").textContent = uniqueUniversities;
-        document.getElementById("total-departments").textContent = uniqueDepartments;
+        document.getElementById("total-universities").textContent = uniqueInstitutions;
+        document.getElementById("total-departments").textContent = uniqueStudy;
     }
 });
 
-// Global Share Function (Must be outside the DOMContentLoaded block)
-window.shareProfile = function(buttonElement, name, university) {
+window.shareProfile = function(buttonElement, name, institution) {
     const websiteUrl = window.location.href.split('?')[0]; 
-    const textToCopy = `Check out ${name} from ${university} on our Alumni Directory! ${websiteUrl}`;
+    const textToCopy = `Check out ${name} from ${institution} on our Alumni Directory! ${websiteUrl}`;
     
     navigator.clipboard.writeText(textToCopy).then(() => {
         const originalText = buttonElement.innerHTML;
