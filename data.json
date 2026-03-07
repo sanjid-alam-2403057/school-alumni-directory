@@ -10,7 +10,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "+1",
     "whatsappNum": "6725526982",
-      "mentoring": true
+      "mentoring": true,
+      "isPublic": true
   },
    {
     "name": "Sanzida Alam",
@@ -23,7 +24,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1725160194",
-      "mentoring": true
+      "mentoring": true,
+      "isPublic": true
   },
    {
     "name": "Md Yasin Arafat",
@@ -36,7 +38,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1740565992",
-      "mentoring": true
+      "mentoring": true,
+      "isPublic": true
   },
     {
     "name": "kefayet ullah shuvo",
@@ -49,8 +52,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1842233076",
-       "isNew": true,
-       "mentoring": true
+       "mentoring": true,
+       "isPublic": true
   },
     {
     "name": "Taslima Tarin",
@@ -63,8 +66,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1619088307",
-       "isNew": true,
-       "mentoring": true
+       "mentoring": true,
+        "isNew": true
   },
    {
     "name": "Md.Rashedul Islam",
@@ -77,8 +80,9 @@
     "emailDomain": "gmail.com",
     "phoneCode": "+880",
     "phoneNum": "1616564479",
-       "isNew": true,
-       "mentoring": true
+       "mentoring": true,
+       "isNew": true
+      
   },
    {
     "name": "Billal Hossen",
@@ -106,8 +110,9 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1863232179",
-     "mentoring": true
-    
+     "mentoring": true,
+     "isPublic": true
+   
   },
    {
     "name": "Shihab Uddin",
@@ -133,7 +138,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1347188043",
-      "mentoring": true
+      "mentoring": true,
+      "isPublic": true
   },
    {
     "name": "Nazrul Islam Nafis",
@@ -146,7 +152,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1742216801",
-      "mentoring": true
+      "mentoring": true,
+      "isPublic": true
   },
     
    {
@@ -160,8 +167,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1516521446",  
-    "isNew": true,
-      "mentoring": true
+      "mentoring": true,
+      "isNew": true
       },
     {
     "name": "MD Al Amin",
