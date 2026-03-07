@@ -31,34 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.classList.add("alumni-card");
             
-            // The bot-proof email button! It glues the email back together when clicked.
-            const contactButton = (alumnus.emailUser && alumnus.emailDomain) ? 
-                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
-                : "";
-
             // 1. The bot-proof email button
             const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
                 `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
                 : "";
 
-            // 2. NEW: The WhatsApp button with a pre-filled message!
+            // 2. The WhatsApp button with a pre-filled message!
             const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
             const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
                 `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
                 : "";
 
-// Email Button
-            const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
-                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
-                : "";
-
-            // WhatsApp Button
-            const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
-            const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
-                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
-                : "";
-
-            // NEW: The Mentoring Badge
+            // 3. NEW: The Mentoring Badge
             const mentoringBadge = alumnus.mentoring ? 
                 `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` 
                 : "";
@@ -151,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
             behavior: "smooth"
         });
     });
+
     // --- NEW: Close Desktop Notice Banner ---
     const desktopNotice = document.getElementById("desktop-notice");
     const closeNoticeBtn = document.getElementById("closeNoticeBtn");
@@ -160,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
             desktopNotice.style.display = "none";
         });
     }
+
     // --- NEW: Live Dashboard Calculator ---
     function updateDashboard(data) {
         // 1. Count total alumni
