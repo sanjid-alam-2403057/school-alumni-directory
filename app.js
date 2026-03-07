@@ -4,13 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortNameBtn = document.getElementById("sortName");
     const sortBatchBtn = document.getElementById("sortBatch");
     const loadMoreBtn = document.getElementById("loadMoreBtn"); 
+    const filterPublicBtn = document.getElementById("filterPublic"); // NEW
     
     let alumniData = [];
     let currentDisplayData = []; 
     
-    // Set to 12 cards before "Load More" appears!
-    let itemsPerPage = 9; 
+    let itemsPerPage = 12; 
     let currentlyShowing = itemsPerPage;
+    
+    let isPublicFilterActive = false; // NEW: Tracks if the filter is ON or OFF
 
     fetch("data.json")
         .then(response => response.json())
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container.innerHTML = ""; 
 
         if (data.length === 0) {
-            container.innerHTML = "<p style='text-align:center; color:#666; width:100%;'>No alumni found matching your search.</p>";
+            container.innerHTML = "<p style='text-align:center; color:#666; width:100%;'>No alumni found matching your criteria.</p>";
             if(loadMoreBtn) loadMoreBtn.style.display = "none"; 
             return;
         }
@@ -46,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
                 : "";
 
-            // NEW: Regular Phone Call Button
             const callButton = (alumnus.phoneCode && alumnus.phoneNum) ? 
                 `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` 
                 : "";
@@ -59,6 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<div class="new-badge">✨ NEW</div>` 
                 : "";
 
+            // NEW: The Public Tag
+            const publicTag = alumnus.isPublic ? `<span class="public-badge">🏛️ Public</span>` : "";
+
             const institutionLabel = alumnus.university ? "University" : "College";
             const institutionValue = alumnus.university || alumnus.college || "N/A";
             
@@ -70,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${mentoringBadge}
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
-                <p><strong>${institutionLabel}:</strong> ${institutionValue}</p>
+                <p><strong>${institutionLabel}:</strong> ${institutionValue} ${publicTag}</p>
                 <p><strong>${studyLabel}:</strong> ${studyValue}</p>
                 <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
                 <div class="badge">SSC Batch: ${alumnus.sscBatch}</div>
@@ -102,10 +106,35 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // NEW: The Public Filter Logic
+    if(filterPublicBtn) {
+        filterPublicBtn.addEventListener("click", () => {
+            isPublicFilterActive = !isPublicFilterActive; // Toggles on and off
+            
+            if (isPublicFilterActive) {
+                // Change button style so they know it is ON
+                filterPublicBtn.style.backgroundColor = "#004aad";
+                filterPublicBtn.style.color = "white";
+            } else {
+                // Revert button style back to normal
+                filterPublicBtn.style.backgroundColor = "";
+                filterPublicBtn.style.color = "";
+            }
+
+            // Re-trigger the search logic so search, sort, and filter all work together!
+            searchInput.dispatchEvent(new Event('input')); 
+        });
+    }
+
+    // UPDATED: Search now respects the Public Filter!
     searchInput.addEventListener("input", (e) => {
         const searchString = e.target.value.toLowerCase();
         
-        currentDisplayData = alumniData.filter(alumnus => {
+        // First, check if we should only look at Public universities
+        let baseData = isPublicFilterActive ? alumniData.filter(a => a.isPublic) : alumniData;
+
+        // Then, filter by the search text
+        currentDisplayData = baseData.filter(alumnus => {
             const institution = (alumnus.university || alumnus.college || "").toLowerCase();
             const name = (alumnus.name || "").toLowerCase();
             const batch = (alumnus.sscBatch || "").toString();
