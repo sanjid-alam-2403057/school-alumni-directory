@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Alumni Directory</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
+    <div id="desktop-notice" class="desktop-notice">
+        <p>🖥️ For the best experience, please use Google Chrome on a Desktop.</p>
+        <button id="closeNoticeBtn" class="close-notice-btn" title="Close Notice">&times;</button>
+    </div>
+
     <header>
         <h1>Our School Alumni</h1>
         <p>Connecting past students with the future.</p>
+        
         <button id="darkModeToggle" class="dark-mode-btn" title="Toggle Dark Mode">🌙</button>
+        
         <a href="https://forms.gle/KCkgUvTfByeTB7856" target="_blank" class="join-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="join-icon">
                 <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
@@ -29,16 +36,18 @@
     </header>
 
     <main id="alumni-container">
-        </main>
+    </main>
 
     <footer>
         <div class="footer-content">
             <p>&copy; 2026 Our School Alumni. All rights reserved.</p>
-           <p>Developed by<strong> Sanjid Alam </strong><br>
-               Department of CSE, RUET</p>
+            <p>Developed by<strong> Sanjid Alam </strong><br>
+            Department of CSE, RUET</p>
         </div>
     </footer>
-<button id="scrollToTopBtn" class="scroll-top-btn" title="Go to top">⬆️</button>
+    
+    <button id="scrollToTopBtn" class="scroll-top-btn" title="Go to top">⬆️</button>
+    
     <script src="app.js"></script>
 </body>
 </html>
