@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let alumniData = [];
     let currentDisplayData = []; 
     
-    let itemsPerPage = 12; 
+    let itemsPerPage = 8; 
     let currentlyShowing = itemsPerPage;
     
     let isPublicFilterActive = false; // NEW: Tracks if the filter is ON or OFF
