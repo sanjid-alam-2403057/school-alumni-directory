@@ -52,6 +52,20 @@
        "isNew": true,
        "mentoring": true
   },
+   {
+    "name": "Md.Rashedul Islam",
+    "university": "National University, Comilla Victoria Collage",
+    "department": "History",
+    "admissionYear": 2023,
+    "sscBatch": 2020,
+    "photo": "images/rashedul.jpg",
+   "emailUser": "rashedulislam1705", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "'1616564479",
+       "isNew": true,
+       "mentoring": true
+  },
   {
     "name": "Sanjid Alam",
     "university": "Rajshahi University of Engineering & Technology",
@@ -63,7 +77,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1863232179",
-     "mentoring": true
+     "mentoring": true,
+     "isNew": true
   },
    {
     "name": "Shihab Uddin",
@@ -104,6 +119,7 @@
     "whatsappNum": "1742216801",
       "mentoring": true
   },
+    
    {
     "name": "Abu Bakar Siddik",
     "university": "Bangladesh University of Business and technology (BUBT)",
