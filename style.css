@@ -558,3 +558,61 @@ body.dark-mode .share-btn:hover {
     background-color: #4b5563;
     color: #fff;
 }
+/* --- NEW ARRIVAL BADGE --- */
+.new-badge {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+    z-index: 10;
+    transform: rotate(-10deg);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+    100% { transform: scale(1) rotate(-10deg); opacity: 1; }
+}
+
+/* --- LOAD MORE BUTTON --- */
+.load-more-container {
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.load-more-btn {
+    background-color: #004aad;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    display: inline-block; /* Helps with centering */
+}
+
+.load-more-btn:hover {
+    background-color: #003073;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .load-more-btn {
+    background-color: #3b82f6;
+}
+
+body.dark-mode .load-more-btn:hover {
+    background-color: #2563eb;
+}
