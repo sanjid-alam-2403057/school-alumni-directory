@@ -7,6 +7,14 @@
     "sscBatch": 2016,
     "photo": "images/sanzida.jpeg"
   },
+   {
+    "name": "Md Yasin Arafat",
+    "university": "Comilla University",
+    "department": "Pharmacy",
+    "admissionYear": 2023,
+    "sscBatch": 2020,
+    "photo": "images/yasin.jpg"
+  },
   {
     "name": "Sanjid Alam",
     "university": "Rajshahi University of Engineering & Technology",
