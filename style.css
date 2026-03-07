@@ -185,23 +185,28 @@ footer {
     justify-content: center;
     gap: 15px;
 }
-
+/* --- UPDATED SORT BUTTONS --- */
 .sort-btn {
-    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
-    color: white;
-    border: 1px solid white;
-    padding: 8px 16px;
-    border-radius: 20px;
+    background-color: rgba(15, 23, 42, 0.85); /* Dark, high-contrast background */
+    color: #ffffff; /* Bright white text */
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    padding: 10px 20px;
+    border-radius: 25px; /* Keeps those nice rounded pills */
+    font-size: 0.95rem;
+    font-weight: 700; /* Makes the text bolder and easier to read */
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    transition: background-color 0.3s, color 0.3s;
-    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px); /* Keeps a tiny bit of the modern blur effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Adds a shadow so they float above the background */
 }
 
+/* Make them light up when someone hovers over them */
 .sort-btn:hover {
-    background-color: white;
-    color: #111;
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: #ffffff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px); /* Makes the button "lift" up slightly */
 }
 /* --- DARK MODE BUTTON STYLING --- */
 .dark-mode-btn {
