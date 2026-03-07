@@ -4,15 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortNameBtn = document.getElementById("sortName");
     const sortBatchBtn = document.getElementById("sortBatch");
     const loadMoreBtn = document.getElementById("loadMoreBtn"); 
-    const filterPublicBtn = document.getElementById("filterPublic"); // NEW
+    const filterPublicBtn = document.getElementById("filterPublic"); 
     
     let alumniData = [];
     let currentDisplayData = []; 
     
-    let itemsPerPage = 8; 
+    let itemsPerPage = 12; 
     let currentlyShowing = itemsPerPage;
     
-    let isPublicFilterActive = false; // NEW: Tracks if the filter is ON or OFF
+    let isPublicFilterActive = false; 
 
     fetch("data.json")
         .then(response => response.json())
@@ -37,7 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dataToShow.forEach(alumnus => {
             const card = document.createElement("div");
-            card.classList.add("alumni-card");
+            
+            // NEW: If they are the developer, add the special glowing card class!
+            if (alumnus.isDeveloper) {
+                card.className = "alumni-card developer-card";
+            } else {
+                card.className = "alumni-card";
+            }
             
             const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
                 `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
@@ -60,8 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<div class="new-badge">✨ NEW</div>` 
                 : "";
 
-            // NEW: The Public Tag
             const publicTag = alumnus.isPublic ? `<span class="public-badge">🏛️ Public</span>` : "";
+            
+            // NEW: The Developer Badge
+            const developerBadge = alumnus.isDeveloper ? `<div class="developer-badge">👨‍💻 Lead Developer</div><br>` : "";
 
             const institutionLabel = alumnus.university ? "University" : "College";
             const institutionValue = alumnus.university || alumnus.college || "N/A";
@@ -74,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${mentoringBadge}
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
+                ${developerBadge}
                 <p><strong>${institutionLabel}:</strong> ${institutionValue} ${publicTag}</p>
                 <p><strong>${studyLabel}:</strong> ${studyValue}</p>
                 <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
@@ -106,34 +115,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // NEW: The Public Filter Logic
     if(filterPublicBtn) {
         filterPublicBtn.addEventListener("click", () => {
-            isPublicFilterActive = !isPublicFilterActive; // Toggles on and off
+            isPublicFilterActive = !isPublicFilterActive; 
             
             if (isPublicFilterActive) {
-                // Change button style so they know it is ON
                 filterPublicBtn.style.backgroundColor = "#004aad";
                 filterPublicBtn.style.color = "white";
             } else {
-                // Revert button style back to normal
                 filterPublicBtn.style.backgroundColor = "";
                 filterPublicBtn.style.color = "";
             }
 
-            // Re-trigger the search logic so search, sort, and filter all work together!
             searchInput.dispatchEvent(new Event('input')); 
         });
     }
 
-    // UPDATED: Search now respects the Public Filter!
     searchInput.addEventListener("input", (e) => {
         const searchString = e.target.value.toLowerCase();
         
-        // First, check if we should only look at Public universities
         let baseData = isPublicFilterActive ? alumniData.filter(a => a.isPublic) : alumniData;
 
-        // Then, filter by the search text
         currentDisplayData = baseData.filter(alumnus => {
             const institution = (alumnus.university || alumnus.college || "").toLowerCase();
             const name = (alumnus.name || "").toLowerCase();
