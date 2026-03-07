@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentDisplayData = []; 
     
     // Set to 12 cards before "Load More" appears!
-    let itemsPerPage = 12; 
+    let itemsPerPage = 9; 
     let currentlyShowing = itemsPerPage;
 
     fetch("data.json")
