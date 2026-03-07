@@ -127,6 +127,19 @@
     "whatsappNum": "1763899713",
       "mentoring": true
   },
+    {
+    "name": "Azharul Islam",
+    "university": "Dhaka Udyan Government College",
+    "group": "Science",
+    "admissionYear": 2025,
+    "sscBatch": 2022,
+    "photo": "images/azharul.jpg",
+      "emailUser": "mdazharulislam2184", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "130144357",
+       "isNew": true
+  },
    {
     "name": "Jannatul Mawya",
     "university": "Comilla University",
