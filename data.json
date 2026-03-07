@@ -10,7 +10,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "+1",
     "whatsappNum": "6725526982",
-      "isNew": true
+      "mentoring": true
   },
    {
     "name": "Sanzida Alam",
@@ -22,7 +22,8 @@
    "emailUser": "sanzidaalam56", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1725160194"
+    "whatsappNum": "1725160194",
+      "mentoring": true
   },
    {
     "name": "Md Yasin Arafat",
@@ -34,7 +35,8 @@
    "emailUser": "Arafat01540", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1740565992"
+    "whatsappNum": "1740565992",
+      "mentoring": true
   },
     {
     "name": "kefayet ullah shuvo",
@@ -73,7 +75,8 @@
       "emailUser": "shihab16965", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1763899713"
+    "whatsappNum": "1763899713",
+      "mentoring": true
   },
    {
     "name": "Jannatul Mawya",
@@ -85,7 +88,8 @@
    "emailUser": "jannatulmawya341", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1347188043"
+    "whatsappNum": "1347188043",
+      "mentoring": true
   },
    {
     "name": "Nazrul Islam Nafis",
@@ -97,6 +101,7 @@
       "emailUser": "nazrulislamnafis7", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1742216801"
+    "whatsappNum": "1742216801",
+      "mentoring": true
   }
 ]
