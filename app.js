@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
-   fetch("data.json")
+   fetch("https://script.google.com/macros/s/AKfycbwFE0-uQhfi9ogxwAzVUlBB0ZHIEy_n8EPBb9mGKyX29dOgy4cohxiiutkcK5hHOxsx/exec")
         .then(response => response.json())
         .then(data => {
             // Hides the spinner when data successfully loads
