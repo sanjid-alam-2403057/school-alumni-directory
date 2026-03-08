@@ -375,7 +375,6 @@ let geoCache = JSON.parse(localStorage.getItem("geoCache")) || {
 };
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
-
 window.plotAlumniOnMap = async function(data) {
     // Clear out the old clusters when filtering/searching
     markersGroup.clearLayers();
@@ -420,45 +419,51 @@ window.plotAlumniOnMap = async function(data) {
         if (!coords) coords = geoCache["DEFAULT"];
 
         // Determine theme colors based on developer status
-        const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; // Gold for dev, Blue for others
+        const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; 
         const pinNeedleColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
 
-        // 3. 🌟 NEW: Create a custom Snapchat-style pin using the alumnus photo!
+        // Create a custom Snapchat-style pin using the alumnus photo
         const customIcon = L.divIcon({
             className: 'custom-profile-pin',
             html: `
                 <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid ${pinBorderColor}; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
                     <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/default-avatar.png'">
-                    </div>
+                </div>
                 <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid ${pinNeedleColor}; margin: 0 auto;"></div>
             `,
-            iconSize: [46, 54], // The total size of the pin
-            iconAnchor: [23, 54], // The point that points exactly to the GPS location
-            popupAnchor: [0, -50] // Where the popup bubble opens relative to the pin
+            iconSize: [46, 54], 
+            iconAnchor: [23, 54], 
+            popupAnchor: [0, -50] 
         });
 
-        // Drop the custom photo pin!
         const marker = L.marker(coords, { icon: customIcon });
         
-        // Dynamic styling for the Popup card inside the map
-        const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 12px; padding: 10px;' : 'padding: 5px;';
+        // Dynamic styling for the Popup card inside the map (Mobile Optimized)
+        const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 8px; padding: 8px;' : 'padding: 5px;';
         const popupNameColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
         const popupImageBorder = alumnus.isDeveloper ? '3px solid #FFD700' : '2px solid #004aad';
 
-        marker.bindPopup(`
-            <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px; ${popupWrapperStyle}">
+        const popupContent = `
+            <div style="font-family: 'Poppins', sans-serif; text-align: center; width: 100%; word-wrap: break-word; box-sizing: border-box; ${popupWrapperStyle}">
                 <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
                 <br>
-                <strong style="color: ${popupNameColor}; font-size: 1.1rem;">${alumnus.name}</strong><br>
-                ${alumnus.isDeveloper ? '<div class="developer-badge" style="display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
-                <span style="font-size: 0.85rem; color: #555;">${uniName}</span><br>
-                <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-top: 5px;">
+                <strong style="color: ${popupNameColor}; font-size: 1.1rem; display: block; line-height: 1.2; margin-bottom: 4px;">${alumnus.name}</strong>
+                ${alumnus.isDeveloper ? '<div style="background: #FFD700; color: #000; padding: 3px 8px; border-radius: 12px; font-weight: bold; display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
+                <span style="font-size: 0.85rem; color: #555; display: block; margin-bottom: 4px;">${uniName}</span>
+                <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block;">
                     Batch: ${alumnus.sscBatch}
                 </span>
             </div>
-        `);
+        `;
 
-        // 4. Add the marker to the Cluster Group instead of directly to the map
+        // Bind popup with specific Leaflet options to fix mobile overlap
+        marker.bindPopup(popupContent, {
+            maxWidth: 220,     // Prevents it from stretching too wide
+            minWidth: 140,     // Keeps it structured
+            autoPanPaddingTopLeft: [50, 50], // Forces map to push the popup away from zoom controls!
+            autoPanPaddingBottomRight: [50, 50]
+        });
+
         markersGroup.addLayer(marker);
     }
 };
