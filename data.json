@@ -97,6 +97,19 @@
       
   },
    {
+    "name": "Rahima akter Mishu",
+    "university": "University of Chittagong",
+    "department": "Statistics",
+    "admissionYear": 2024,
+    "sscBatch": 2021,
+    "photo": "images/mishu.jpeg",
+   "emailUser": "mhosain4444", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1751905910",
+     "mentoring": true
+    },
+   {
     "name": "Billal Hossen",
     "university": "National university",
     "department": "Philosophy",
