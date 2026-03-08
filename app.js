@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
-   // FETCHING FROM YOUR LOCAL JSON FILE (Reverted)
+   // FETCHING FROM YOUR LOCAL JSON FILE
    fetch("data.json")
         .then(response => response.json())
-.then(data => {
+        .then(data => {
             // Hides the spinner when data successfully loads
             const spinner = document.getElementById("loadingSpinner");
             if (spinner) spinner.style.display = "none"; 
@@ -32,12 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
             updateDashboard(alumniData); 
             populateDropdowns(alumniData); 
             
-            // 👇 ADD THIS NEW LINE RIGHT HERE 👇
+            // Trigger the smart map!
             plotAlumniOnMap(alumniData); 
         })
         .catch(error => {
             console.error("Error loading alumni data:", error);
-            // Hides the spinner even if there is an error!
             const spinner = document.getElementById("loadingSpinner");
             if (spinner) spinner.style.display = "none";
             
@@ -50,11 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function populateDropdowns(data) {
         if (!universityFilter || !batchFilter) return;
 
-        // Clear out any existing options first so they don't duplicate!
         universityFilter.innerHTML = '<option value="">🏫 All Institutions</option>';
         batchFilter.innerHTML = '<option value="">📅 All Batches</option>';
 
-        // Get unique universities and sort alphabetically
         const universities = [...new Set(data.map(a => a.university || a.college).filter(Boolean))].sort();
         universities.forEach(uni => {
             const option = document.createElement("option");
@@ -63,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
             universityFilter.appendChild(option);
         });
 
-        // Get unique batches and sort newest to oldest
         const batches = [...new Set(data.map(a => a.sscBatch).filter(Boolean))].sort((a, b) => b - a);
         batches.forEach(batch => {
             const option = document.createElement("option");
@@ -74,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function displayAlumni(data) {
-        if (!container) return; // Safety check
+        if (!container) return; 
         container.innerHTML = ""; 
 
         if (data.length === 0) {
@@ -103,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 studyLabel = "Group";
             }
             
-            // BUTTONS: Using your original JSON variables
             const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
                 `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` : "";
 
@@ -124,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
                 ${newArrivalBadge}
                 ${mentoringBadge}
-                <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
+                <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}" onerror="this.src='images/default-avatar.png'">
                 <h2>${alumnus.name}</h2>
                 ${developerBadge}
                 <p><strong>Institution:</strong> ${institutionValue} ${publicTag}</p>
@@ -165,10 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const name = (alumnus.name || "").toLowerCase();
             const batch = (alumnus.sscBatch || "").toString();
 
-            // Check if it matches search text
             const matchesSearch = name.includes(searchString) || institution.toLowerCase().includes(searchString) || batch.includes(searchString);
-            
-            // Check if it matches dropdowns
             const matchesUni = selectedUni === "" || institution === selectedUni;
             const matchesBatch = selectedBatch === "" || batch === selectedBatch;
 
@@ -177,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData); 
-        plotAlumniOnMap(currentDisplayData);
+        plotAlumniOnMap(currentDisplayData); // Update Map with filtered results
     }
 
     // Event Listeners for Filters
@@ -222,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- DARK MODE LOGIC (Now safely wrapped!) ---
+    // --- DARK MODE LOGIC ---
     const darkModeToggle = document.getElementById("darkModeToggle");
     const body = document.body;
 
@@ -268,8 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const totalAlumni = data.length;
         const uniqueInstitutions = new Set(data.map(a => a.university || a.college).filter(Boolean)).size;
-        
-        // Smart count for dashboard: Count unique departments OR groups
         const uniqueStudy = new Set(data.map(a => a.department || a.group).filter(Boolean)).size;
 
         if (totalAlumniElement) totalAlumniElement.textContent = totalAlumni;
@@ -346,10 +336,11 @@ if ('serviceWorker' in navigator) {
             .then(reg => console.log('Service Worker Registered!', reg))
             .catch(err => console.error('Service Worker Registration Failed!', err));
     });
-}// ==========================================
-// 🗺️ INTERACTIVE ALUMNI MAP LOGIC (REAL DATA)
-// ==========================================
+}
 
+// ==========================================
+// 🗺️ SMART AUTOMATIC MAP LOGIC (Geocoding)
+// ==========================================
 const map = L.map('alumniMap').setView([23.6850, 90.3563], 7);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -357,56 +348,74 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// 📖 GPS Dictionary: Add your most common universities here!
-const universityCoords = {
-    "RUET": [24.3745, 88.6042],
-    "BUET": [23.7270, 90.3920],
-    "CUET": [22.4604, 91.9715],
-    "KUET": [22.8996, 89.5020],
-    "SUST": [24.9193, 91.8316],
-    "Dhaka University": [23.7330, 90.3928],
-    "Rajshahi University": [24.3698, 88.6368],
-    "Chittagong University": [22.4704, 91.7896],
-    "Jahangirnagar University": [23.8805, 90.2676],
-    "NSU": [23.8151, 90.4255],
-    "BRAC": [23.7803, 90.4069],
-    "IUT": [23.9482, 90.3793],
-    "MIST": [23.8378, 90.3578],
-    // If someone's uni isn't on the list, it drops them in the center of Dhaka
-    "DEFAULT": [23.7500, 90.3900] 
-};
-
-// Array to store active pins (so we can clear them when searching)
 let mapMarkers = [];
 
-// 🚀 The function that plots your real data
-window.plotAlumniOnMap = function(data) {
-    // 1. Clear the old pins off the map
+// 🧠 Smart Cache: Saves coordinates so we don't have to search the same uni twice!
+let geoCache = JSON.parse(localStorage.getItem("geoCache")) || {
+    "DEFAULT": [23.7500, 90.3900] // Center of Dhaka as ultimate fallback
+};
+
+// Helper function to pause for 1 second (respects free API limits)
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+window.plotAlumniOnMap = async function(data) {
+    // 1. Clear old pins
     mapMarkers.forEach(marker => map.removeLayer(marker));
     mapMarkers = [];
 
-    // 2. Loop through your real alumni data
-    data.forEach(alumnus => {
+    // 2. Loop through alumni data
+    for (const alumnus of data) {
         const uniName = alumnus.university || alumnus.college;
-        if (!uniName) return; 
+        const locationName = alumnus.location || ""; 
+        
+        if (!uniName) continue;
 
-        // 3. Look up the GPS coordinates, or use the DEFAULT if not found
-        let baseCoords = universityCoords[uniName] || universityCoords["DEFAULT"];
+        let searchQuery = `${uniName}, Bangladesh`;
+        let coords = geoCache[searchQuery];
 
-        // 4. "Jitter" the pins slightly so people at the same uni don't overlap completely
+        // 3. If we haven't searched this uni before, ask the OpenStreetMap API
+        if (!coords) {
+            try {
+                await delay(1000); 
+                
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
+                const result = await response.json();
+
+                if (result && result.length > 0) {
+                    coords = [parseFloat(result[0].lat), parseFloat(result[0].lon)];
+                    geoCache[searchQuery] = coords; 
+                    localStorage.setItem("geoCache", JSON.stringify(geoCache)); 
+                } else if (locationName) {
+                    const fallbackQuery = `${locationName}, Bangladesh`;
+                    await delay(1000);
+                    const fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}`);
+                    const fbResult = await fbResponse.json();
+                    
+                    if (fbResult && fbResult.length > 0) {
+                        coords = [parseFloat(fbResult[0].lat), parseFloat(fbResult[0].lon)];
+                        geoCache[searchQuery] = coords; 
+                        localStorage.setItem("geoCache", JSON.stringify(geoCache));
+                    }
+                }
+            } catch (error) {
+                console.warn(`Could not automatically find coordinates for: ${uniName}`);
+            }
+        }
+
+        if (!coords) coords = geoCache["DEFAULT"];
+
+        // 4. Jitter logic so pins don't stack directly on top of each other
         const jitter = 0.006;
         const finalCoords = [
-            baseCoords[0] + (Math.random() - 0.5) * jitter,
-            baseCoords[1] + (Math.random() - 0.5) * jitter
+            coords[0] + (Math.random() - 0.5) * jitter,
+            coords[1] + (Math.random() - 0.5) * jitter
         ];
 
-        // 5. Drop the pin!
         const marker = L.marker(finalCoords).addTo(map);
         
-        // 6. Create a beautiful pop-up featuring their actual photo and data
         marker.bindPopup(`
             <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px;">
-                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #004aad; margin-bottom: 5px;">
+                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #004aad; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
                 <br>
                 <strong style="color: #004aad; font-size: 1.1rem;">${alumnus.name}</strong><br>
                 <span style="font-size: 0.85rem; color: #555;">${uniName}</span><br>
@@ -417,5 +426,5 @@ window.plotAlumniOnMap = function(data) {
         `);
 
         mapMarkers.push(marker);
-    });
+    }
 };
