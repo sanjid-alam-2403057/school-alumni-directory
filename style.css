@@ -791,6 +791,34 @@ body.dark-mode .copy-number-btn { color: #cbd5e1; border-color: #475569;}
 .copy-number-btn:hover { background-color: #e2e8f0; color: #0f172a; }
 body.dark-mode .copy-number-btn:hover { background-color: #334155; color: white;}
 /* =========================================
+   💻 TABLET & SMALL DESKTOP RESPONSIVE FIXES
+   ========================================= */
+@media screen and (max-width: 1100px) {
+    /* Allow the sort and filter buttons to drop to a new line */
+    .sort-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    /* Stop the dropdown menus from stretching too wide or getting cut off */
+    .sort-container button,
+    .sort-container select {
+        flex: 1 1 auto; /* Allows them to shrink and grow neatly */
+        min-width: 150px; /* Keeps them from getting too squished */
+    }
+
+    /* Allow the stat boxes to wrap nicely */
+    .stats-dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+}
+/* =========================================
    📱 MOBILE RESPONSIVE DESIGN FIXES
    ========================================= */
 @media screen and (max-width: 768px) {
