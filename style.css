@@ -946,3 +946,200 @@ body.dark-mode .leaflet-popup-content strong {
 body.dark-mode .leaflet-popup-content span {
     color: #cbd5e1 !important;
 }
+/* =========================================
+   CLEANED UP ALUMNI CARD CSS
+========================================= */
+
+/* Alert Messages */
+.error-msg { text-align: center; color: red; width: 100%; font-weight: 500; }
+.empty-msg { text-align: center; color: #666; width: 100%; font-style: italic; }
+
+/* Call Button Styling */
+.call-btn {
+    background-color: #059669;
+    color: white;
+    border-color: #059669;
+}
+.call-btn:hover {
+    background-color: #047857;
+    border-color: #047857;
+}
+
+/* Share & Digital ID Buttons (with No-Wrap fix!) */
+.card-action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-share, .btn-digital-id {
+    flex: 1;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 5px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap; /* Prevents button text squishing! */
+    transition: all 0.2s ease;
+}
+
+.btn-share {
+    background-color: #ffffff;
+    color: #004aad;
+    border: 2px solid #004aad;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.btn-share:hover {
+    background-color: #f0f8ff;
+}
+
+.btn-digital-id {
+    background-color: #10b981;
+    color: white;
+    border: 2px solid #10b981;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-digital-id:hover {
+    background-color: #059669;
+    border-color: #059669;
+}
+
+/* Success State (Used briefly by Javascript when clicking Share/Download) */
+.btn-success-state {
+    background-color: #25D366 !important;
+    color: white !important;
+    border-color: #25D366 !important;
+}
+
+/* Public Filter Active State */
+.active-filter {
+    background-color: #004aad !important;
+    color: white !important;
+}
+
+/* =========================================
+   CLEANED UP MAP CSS
+========================================= */
+
+/* Map Loading Overlay */
+.map-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    border-radius: inherit;
+    transition: opacity 0.3s ease;
+}
+
+.map-spinner {
+    width: 35px;
+    height: 35px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #004aad;
+    border-radius: 50%;
+    animation: mapSpin 1s linear infinite;
+}
+
+.map-overlay-text {
+    margin-left: 12px;
+    font-weight: 600;
+    color: #004aad;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    text-shadow: 0px 0px 5px white;
+}
+
+@keyframes mapSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Custom Profile Pin (Snapchat style) */
+.pin-img-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    position: relative;
+}
+.pin-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.pin-needle {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid;
+    margin: 0 auto;
+}
+
+/* Map Popups (Mobile Optimized) */
+.map-popup-container {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    padding: 5px;
+}
+.map-popup-container.dev-popup {
+    border-top: 4px solid #FFD700;
+    border-radius: 8px;
+    padding: 8px;
+}
+.map-popup-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid;
+    margin-bottom: 5px;
+}
+.map-popup-name {
+    font-size: 1.1rem;
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+.map-popup-dev-badge {
+    background: #FFD700;
+    color: #000;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: inline-block;
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+}
+.map-popup-uni {
+    font-size: 0.85rem;
+    color: #555;
+    display: block;
+    margin-bottom: 4px;
+}
+.map-popup-batch {
+    font-size: 0.75rem;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 2px 6px;
+    border-radius: 10px;
+    display: inline-block;
+}
