@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
    fetch("data.json")
         .then(response => response.json())
         .then(data => {
-            // Hides the spinner when data successfully loads
             const spinner = document.getElementById("loadingSpinner");
             if (spinner) spinner.style.display = "none"; 
             
@@ -41,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (spinner) spinner.style.display = "none";
             
             if (container) {
-                container.innerHTML = "<p style='text-align:center; color:red; width:100%;'>Error loading data. Please try again later.</p>";
+                container.innerHTML = "<p class='error-msg'>Error loading data. Please try again later.</p>";
             }
         });
 
@@ -74,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container.innerHTML = ""; 
 
         if (data.length === 0) {
-            container.innerHTML = "<p style='text-align:center; color:#666; width:100%;'>No alumni found matching your criteria.</p>";
+            container.innerHTML = "<p class='empty-msg'>No alumni found matching your criteria.</p>";
             if(loadMoreBtn) loadMoreBtn.style.display = "none"; 
             return;
         }
@@ -107,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` : "";
 
             const callButton = (alumnus.phoneCode && alumnus.phoneNum) ? 
-                `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` : "";
+                `<button class="contact-btn call-btn" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` : "";
 
             const mentoringBadge = alumnus.mentoring ? `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` : "";
             const newArrivalBadge = alumnus.isNew ? `<div class="new-badge">✨ NEW</div>` : "";
@@ -126,9 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // --- ACTION BUTTONS (Share & Digital ID) ---
             const actionButtons = `
-                <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <button class="share-btn" style="flex: 1;" onclick="shareProfile(this, '${safeName}', '${safeUni}')">🔗 Share</button>
-                    <button class="share-btn" style="flex: 1; background-color: #10b981; color: white; border-color: #10b981;" onclick="generateIDCard('${safeName}', '${safePhoto}', '${safeUni}', '${safeDept}', '${safeBatch}', '${safeAdmission}', this)">🪪 Digital ID</button>
+                <div class="card-action-buttons">
+                    <button class="btn-share" onclick="shareProfile(this, '${safeName}', '${safeUni}')">🔗 Share</button>
+                    <button class="btn-digital-id" onclick="generateIDCard('${safeName}', '${safePhoto}', '${safeUni}', '${safeDept}', '${safeBatch}', '${safeAdmission}', this)">🪪 Digital ID</button>
                 </div>
             `;
 
@@ -197,13 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (filterPublicBtn) {
         filterPublicBtn.addEventListener("click", () => {
             isPublicFilterActive = !isPublicFilterActive; 
-            if (isPublicFilterActive) {
-                filterPublicBtn.style.backgroundColor = "#004aad";
-                filterPublicBtn.style.color = "white";
-            } else {
-                filterPublicBtn.style.backgroundColor = "";
-                filterPublicBtn.style.color = "";
-            }
+            filterPublicBtn.classList.toggle("active-filter");
             applyFilters(); 
         });
     }
@@ -293,15 +286,11 @@ window.shareProfile = function(buttonElement, name, institution) {
     navigator.clipboard.writeText(textToCopy).then(() => {
         const originalText = buttonElement.innerHTML;
         buttonElement.innerHTML = "✅ Copied!";
-        buttonElement.style.backgroundColor = "#25D366";
-        buttonElement.style.color = "white";
-        buttonElement.style.borderColor = "#25D366";
+        buttonElement.classList.add("btn-success-state");
         
         setTimeout(() => {
             buttonElement.innerHTML = originalText;
-            buttonElement.style.backgroundColor = "";
-            buttonElement.style.color = "";
-            buttonElement.style.borderColor = "";
+            buttonElement.classList.remove("btn-success-state");
         }, 2000);
     });
 };
@@ -333,15 +322,11 @@ window.copyPaymentNumber = function(number, buttonElement) {
     navigator.clipboard.writeText(number).then(() => {
         const originalText = buttonElement.innerHTML;
         buttonElement.innerHTML = "✅ Copied!";
-        buttonElement.style.backgroundColor = "#25D366";
-        buttonElement.style.color = "white";
-        buttonElement.style.borderColor = "#25D366";
+        buttonElement.classList.add("btn-success-state");
         
         setTimeout(() => {
             buttonElement.innerHTML = originalText;
-            buttonElement.style.backgroundColor = "transparent";
-            buttonElement.style.color = "";
-            buttonElement.style.borderColor = "";
+            buttonElement.classList.remove("btn-success-state");
         }, 2000);
     });
 };
@@ -359,7 +344,6 @@ if ('serviceWorker' in navigator) {
 // 🗺️ SMART AUTOMATIC MAP LOGIC (Clustered & Locked to BD)
 // ==========================================
 
-// 1. Draw a fence around Bangladesh (Southwest corner, Northeast corner)
 const bangladeshBounds = [
     [20.3, 87.8], 
     [26.9, 92.9]  
@@ -368,9 +352,9 @@ const bangladeshBounds = [
 const map = L.map('alumniMap', {
     center: [23.6850, 90.3563],
     zoom: 7,
-    minZoom: 6, // Stops them from zooming out to see the whole world
-    maxBounds: bangladeshBounds, // Locks the map inside Bangladesh
-    maxBoundsViscosity: 1.0 // Adds a "bounce back" effect if they try to drag outside
+    minZoom: 6,
+    maxBounds: bangladeshBounds,
+    maxBoundsViscosity: 1.0
 });
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -378,7 +362,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// 2. Initialize the Clustering Group
 let markersGroup = L.markerClusterGroup({
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
@@ -393,33 +376,22 @@ let geoCache = JSON.parse(localStorage.getItem("geoCache")) || {
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 window.plotAlumniOnMap = async function(data) {
-    // --- 1. SHOW THE "UPDATING MAP" OVERLAY ---
     let mapContainer = document.getElementById('alumniMap');
     let mapLoadingOverlay = document.getElementById('mapLoadingOverlay');
     
-    // Create the overlay dynamically if it doesn't exist yet
     if (!mapLoadingOverlay && mapContainer) {
         mapLoadingOverlay = document.createElement('div');
         mapLoadingOverlay.id = 'mapLoadingOverlay';
+        mapLoadingOverlay.className = 'map-loading-overlay';
         mapLoadingOverlay.innerHTML = `
-            <div style="width: 35px; height: 35px; border: 4px solid #e2e8f0; border-top: 4px solid #004aad; border-radius: 50%; animation: mapSpin 1s linear infinite;"></div>
-            <span style="margin-left: 12px; font-weight: 600; color: #004aad; font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-shadow: 0px 0px 5px white;">Updating Map...</span>
+            <div class="map-spinner"></div>
+            <span class="map-overlay-text">Updating Map...</span>
         `;
-        // Styling to make it float over the map with a blur effect
-        mapLoadingOverlay.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.6); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(3px); border-radius: inherit; transition: opacity 0.3s ease;';
-        
-        // Add the CSS animation for the spinner
-        const style = document.createElement('style');
-        style.innerHTML = '@keyframes mapSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
-        document.head.appendChild(style);
-        
         mapContainer.appendChild(mapLoadingOverlay);
     }
     
-    // Make sure it is visible when the function starts
     if (mapLoadingOverlay) mapLoadingOverlay.style.display = 'flex';
 
-    // Clear out the old clusters when filtering/searching
     markersGroup.clearLayers();
 
     try {
@@ -435,7 +407,6 @@ window.plotAlumniOnMap = async function(data) {
             if (!coords) {
                 try {
                     await delay(1000); 
-                    
                     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
                     const result = await response.json();
 
@@ -462,18 +433,20 @@ window.plotAlumniOnMap = async function(data) {
 
             if (!coords) coords = geoCache["DEFAULT"];
 
-            // Determine theme colors based on developer status
+            // Determine theme colors dynamically
             const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; 
             const pinNeedleColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
+            const popupWrapperClass = alumnus.isDeveloper ? 'map-popup-container dev-popup' : 'map-popup-container';
+            const popupImageBorder = alumnus.isDeveloper ? '#FFD700' : '#004aad';
 
-            // Create a custom Snapchat-style pin using the alumnus photo
+            // HTML for custom map pin
             const customIcon = L.divIcon({
                 className: 'custom-profile-pin',
                 html: `
-                    <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid ${pinBorderColor}; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
-                        <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/default-avatar.png'">
+                    <div class="pin-img-wrapper" style="border-color: ${pinBorderColor};">
+                        <img src="${alumnus.photo || 'images/default-avatar.png'}" class="pin-img" onerror="this.src='images/default-avatar.png'">
                     </div>
-                    <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid ${pinNeedleColor}; margin: 0 auto;"></div>
+                    <div class="pin-needle" style="border-top-color: ${pinNeedleColor};"></div>
                 `,
                 iconSize: [46, 54], 
                 iconAnchor: [23, 54], 
@@ -482,36 +455,28 @@ window.plotAlumniOnMap = async function(data) {
 
             const marker = L.marker(coords, { icon: customIcon });
             
-            // Dynamic styling for the Popup card inside the map (Mobile Optimized)
-            const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 8px; padding: 8px;' : 'padding: 5px;';
-            const popupNameColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
-            const popupImageBorder = alumnus.isDeveloper ? '3px solid #FFD700' : '2px solid #004aad';
-
+            // HTML for the map popup
             const popupContent = `
-                <div style="font-family: 'Poppins', sans-serif; text-align: center; width: 100%; word-wrap: break-word; box-sizing: border-box; ${popupWrapperStyle}">
-                    <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
+                <div class="${popupWrapperClass}">
+                    <img src="${alumnus.photo || 'images/default-avatar.png'}" class="map-popup-img" style="border-color: ${popupImageBorder};" onerror="this.src='images/default-avatar.png'">
                     <br>
-                    <strong style="color: ${popupNameColor}; font-size: 1.1rem; display: block; line-height: 1.2; margin-bottom: 4px;">${alumnus.name}</strong>
-                    ${alumnus.isDeveloper ? '<div style="background: #FFD700; color: #000; padding: 3px 8px; border-radius: 12px; font-weight: bold; display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
-                    <span style="font-size: 0.85rem; color: #555; display: block; margin-bottom: 4px;">${uniName}</span>
-                    <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block;">
-                        Batch: ${alumnus.sscBatch}
-                    </span>
+                    <strong class="map-popup-name" style="color: ${pinBorderColor};">${alumnus.name}</strong>
+                    ${alumnus.isDeveloper ? '<div class="map-popup-dev-badge">👨‍💻 Lead Developer</div><br>' : ''}
+                    <span class="map-popup-uni">${uniName}</span>
+                    <span class="map-popup-batch">Batch: ${alumnus.sscBatch}</span>
                 </div>
             `;
 
-            // Bind popup with specific Leaflet options to fix mobile overlap
             marker.bindPopup(popupContent, {
-                maxWidth: 220,     // Prevents it from stretching too wide
-                minWidth: 140,     // Keeps it structured
-                autoPanPaddingTopLeft: [50, 50], // Forces map to push the popup away from zoom controls!
+                maxWidth: 220,     
+                minWidth: 140,     
+                autoPanPaddingTopLeft: [50, 50], 
                 autoPanPaddingBottomRight: [50, 50]
             });
 
             markersGroup.addLayer(marker);
         }
     } finally {
-        // --- 2. HIDE THE OVERLAY WHEN FINISHED ---
         if (mapLoadingOverlay) {
             mapLoadingOverlay.style.display = 'none';
         }
@@ -522,13 +487,11 @@ window.plotAlumniOnMap = async function(data) {
 // 🪪 DIGITAL ID CARD GENERATOR LOGIC
 // ==========================================
 window.generateIDCard = function(name, photo, uni, dept, batch, admitted, buttonElement) {
-    // 1. Give the user visual feedback that it's working
     const originalText = buttonElement.innerHTML;
     buttonElement.innerHTML = "⏳ Generating...";
     buttonElement.disabled = true;
     buttonElement.style.opacity = "0.7";
 
-    // 2. Populate the hidden HTML template with this specific user's data
     document.getElementById('id-card-name').textContent = name;
     document.getElementById('id-card-uni').textContent = uni;
     document.getElementById('id-card-dept').textContent = dept;
@@ -538,44 +501,38 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
     const photoElement = document.getElementById('id-card-photo');
     photoElement.src = photo;
 
-    // 3. We must wait for the image to fully load in the hidden div before taking the screenshot!
     photoElement.onload = function() {
         takeScreenshotAndDownload();
     };
     
-    // Fallback if image fails to load (e.g., broken link)
     photoElement.onerror = function() {
         photoElement.src = 'images/default-avatar.png';
         takeScreenshotAndDownload();
     };
 
-    // If the browser already cached the image, onload might fire instantly
     if (photoElement.complete) {
         takeScreenshotAndDownload();
     }
 
-    // 4. The actual screenshot logic
     function takeScreenshotAndDownload() {
         const cardTemplate = document.getElementById('id-card-template');
 
         html2canvas(cardTemplate, {
-            scale: 2, // Double resolution for a crisp, high-quality image
-            useCORS: true, // Crucial: Allows external photos to be drawn on the canvas safely
+            scale: 2, 
+            useCORS: true, 
             backgroundColor: null 
         }).then(canvas => {
-            // Create a fake link to trigger the download
             const link = document.createElement('a');
             link.download = `${name.replace(/\s+/g, '_')}_Alumni_ID.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
             
-            // Restore button to a success state!
             buttonElement.innerHTML = "✅ Downloaded!";
-            buttonElement.style.backgroundColor = "#059669"; // Slightly darker green
+            buttonElement.classList.add("btn-success-state");
             
             setTimeout(() => {
                 buttonElement.innerHTML = originalText;
-                buttonElement.style.backgroundColor = "#10b981"; // Back to original green
+                buttonElement.classList.remove("btn-success-state");
                 buttonElement.style.opacity = "1";
                 buttonElement.disabled = false;
             }, 2500);
