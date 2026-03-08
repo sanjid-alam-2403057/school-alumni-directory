@@ -29,9 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error("Error loading alumni data:", error));
 
-    // NEW FUNCTION: Automatically fill dropdowns with unique data
+   // NEW FUNCTION: Automatically fill dropdowns with unique data
     function populateDropdowns(data) {
         if (!universityFilter || !batchFilter) return;
+
+        // 🛑 THE FIX: Clear out any existing options first so they don't duplicate!
+        universityFilter.innerHTML = '<option value="">🏫 All Institutions</option>';
+        batchFilter.innerHTML = '<option value="">📅 All Batches</option>';
 
         // Get unique universities and sort alphabetically
         const universities = [...new Set(data.map(a => a.university || a.college).filter(Boolean))].sort();
