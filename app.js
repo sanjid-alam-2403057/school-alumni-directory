@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("data.json")
         .then(response => response.json())
         .then(data => {
+            document.getElementById("loadingSpinner").style.display = "none";
             alumniData = data;
             currentDisplayData = [...alumniData]; 
             displayAlumni(currentDisplayData); 
