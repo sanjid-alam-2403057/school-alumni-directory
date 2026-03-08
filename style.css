@@ -790,3 +790,76 @@ body.dark-mode .phone-number { color: #f8fafc; }
 body.dark-mode .copy-number-btn { color: #cbd5e1; border-color: #475569;}
 .copy-number-btn:hover { background-color: #e2e8f0; color: #0f172a; }
 body.dark-mode .copy-number-btn:hover { background-color: #334155; color: white;}
+/* =========================================
+   📱 MOBILE RESPONSIVE DESIGN FIXES
+   ========================================= */
+@media screen and (max-width: 768px) {
+    /* 1. Make the header fit better and text more readable */
+    header {
+        padding: 20px 15px;
+    }
+    header h1 {
+        font-size: 1.8rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Helps text stand out against the background */
+    }
+    header p {
+        font-size: 1rem;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    }
+    
+    /* 2. Fix the Search bar so it doesn't break out of the screen */
+    .search-container {
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+    .search-container input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* 3. Stack the Sort & Filter buttons neatly */
+    .sort-container {
+        display: flex;
+        flex-direction: column; /* Stacks them vertically */
+        gap: 10px;
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+    .sort-container button,
+    .sort-container select {
+        width: 100%;
+        margin: 0; /* Removes weird side margins */
+        box-sizing: border-box;
+    }
+    
+    /* 4. Fix the Stats Dashboard */
+    .stats-dashboard {
+        display: flex;
+        flex-direction: column; /* Stacks the stat boxes */
+        gap: 15px;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    .stat-box {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    /* 5. Ensure the Alumni Cards fit the screen perfectly */
+    #alumni-container {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .alumni-card {
+        width: 100%;
+        max-width: 100%; /* Prevents horizontal scrolling */
+        margin: 10px 0;
+        box-sizing: border-box;
+    }
+}
