@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
    // FETCHING FROM YOUR LOCAL JSON FILE (Reverted)
    fetch("data.json")
         .then(response => response.json())
-        .then(data => {
+.then(data => {
             // Hides the spinner when data successfully loads
             const spinner = document.getElementById("loadingSpinner");
             if (spinner) spinner.style.display = "none"; 
@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
             displayAlumni(currentDisplayData); 
             updateDashboard(alumniData); 
             populateDropdowns(alumniData); 
+            
+            // 👇 ADD THIS NEW LINE RIGHT HERE 👇
+            plotAlumniOnMap(alumniData); 
         })
         .catch(error => {
             console.error("Error loading alumni data:", error);
@@ -174,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData); 
+        plotAlumniOnMap(currentDisplayData);
     }
 
     // Event Listeners for Filters
