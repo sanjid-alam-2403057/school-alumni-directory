@@ -376,7 +376,6 @@ let geoCache = JSON.parse(localStorage.getItem("geoCache")) || {
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-
 window.plotAlumniOnMap = async function(data) {
     // Clear out the old clusters when filtering/searching
     markersGroup.clearLayers();
@@ -441,41 +440,29 @@ window.plotAlumniOnMap = async function(data) {
         const marker = L.marker(coords, { icon: customIcon });
         
         // Dynamic styling for the Popup card inside the map (Mobile Optimized)
-        const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 8px; padding: 10px 5px;' : 'padding: 8px 5px;';
+        const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 8px; padding: 8px;' : 'padding: 5px;';
         const popupNameColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
         const popupImageBorder = alumnus.isDeveloper ? '3px solid #FFD700' : '2px solid #004aad';
 
-        // Tightly constrained HTML to prevent card expansion
         const popupContent = `
-            <div style="font-family: 'Poppins', sans-serif; text-align: center; width: 100%; word-wrap: break-word; white-space: normal; box-sizing: border-box; ${popupWrapperStyle}">
-                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
+            <div style="font-family: 'Poppins', sans-serif; text-align: center; width: 100%; word-wrap: break-word; box-sizing: border-box; ${popupWrapperStyle}">
+                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
                 <br>
-                <strong style="color: ${popupNameColor}; font-size: 1rem; display: block; line-height: 1.2; margin-bottom: 4px;">${alumnus.name}</strong>
-                ${alumnus.isDeveloper ? '<div style="background: #FFD700; color: #000; padding: 2px 6px; border-radius: 12px; font-weight: bold; display:inline-block; font-size:0.65rem; margin-bottom:4px; line-height: 1.2;">👨‍💻 Lead Developer</div><br>' : ''}
-                <span style="font-size: 0.75rem; color: #555; display: block; margin-bottom: 4px; line-height: 1.2;">${uniName}</span>
-                <span style="font-size: 0.7rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block;">
+                <strong style="color: ${popupNameColor}; font-size: 1.1rem; display: block; line-height: 1.2; margin-bottom: 4px;">${alumnus.name}</strong>
+                ${alumnus.isDeveloper ? '<div style="background: #FFD700; color: #000; padding: 3px 8px; border-radius: 12px; font-weight: bold; display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
+                <span style="font-size: 0.85rem; color: #555; display: block; margin-bottom: 4px;">${uniName}</span>
+                <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block;">
                     Batch: ${alumnus.sscBatch}
                 </span>
             </div>
         `;
 
-        // Bind popup with maximum constraints
+        // Bind popup with specific Leaflet options to fix mobile overlap
         marker.bindPopup(popupContent, {
-            maxWidth: 180,     // Strictly limits width so it doesn't hit UI buttons
-            minWidth: 130,     
-            autoPanPadding: [40, 40] // Standard padding buffer
-        });
-
-        // 🌟 THE MAGIC FIX: If the user clicks a pin while heavily zoomed out, 
-        // gently zoom the map in a bit so the popup has room to open without hitting the boundary walls!
-        marker.on('click', function(e) {
-            const currentZoom = map.getZoom();
-            // If they are zoomed out past level 8, zoom in to level 8
-            if (currentZoom < 8) {
-                map.setView(e.latlng, 8, { animate: true });
-            } else {
-                map.panTo(e.latlng); // Center it beautifully
-            }
+            maxWidth: 220,     // Prevents it from stretching too wide
+            minWidth: 140,     // Keeps it structured
+            autoPanPaddingTopLeft: [50, 50], // Forces map to push the popup away from zoom controls!
+            autoPanPaddingBottomRight: [50, 50]
         });
 
         markersGroup.addLayer(marker);
