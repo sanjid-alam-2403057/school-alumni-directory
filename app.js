@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
-   // Fetch data from live Google Sheet
-   fetch("https://script.google.com/macros/s/AKfycbwFE0-uQhfi9ogxwAzVUlBB0ZHIEy_n8EPBb9mGKyX29dOgy4cohxiiutkcK5hHOxsx/exec")
+   // FETCHING FROM YOUR LOCAL JSON FILE (Reverted)
+   fetch("data.json")
         .then(response => response.json())
         .then(data => {
             // Hides the spinner when data successfully loads
@@ -97,13 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 studyLabel = "Group";
             }
             
-            // SIMPLIFIED BUTTONS: Grabbing the full string from the sheet
-            const emailButton = (alumnus.email) ? 
-                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.email}'">✉️ Email</button>` : "";
+            // REVERTED BUTTONS: Using your original JSON variables
+            const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
+                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` : "";
 
             const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
-            const whatsappButton = (alumnus.whatsapp) ? 
-                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsapp}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` : "";
+            const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
+                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` : "";
 
             const callButton = (alumnus.phoneCode && alumnus.phoneNum) ? 
                 `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` : "";
