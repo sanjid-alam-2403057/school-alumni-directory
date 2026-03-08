@@ -337,51 +337,61 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.error('Service Worker Registration Failed!', err));
     });
 }
+// ==========================================
+// 🗺️ SMART AUTOMATIC MAP LOGIC (Clustered & Locked to BD)
+// ==========================================
 
-// ==========================================
-// 🗺️ SMART AUTOMATIC MAP LOGIC (Geocoding)
-// ==========================================
-const map = L.map('alumniMap').setView([23.6850, 90.3563], 7);
+// 1. Draw a fence around Bangladesh (Southwest corner, Northeast corner)
+const bangladeshBounds = [
+    [20.3, 87.8], 
+    [26.9, 92.9]  
+];
+
+const map = L.map('alumniMap', {
+    center: [23.6850, 90.3563],
+    zoom: 7,
+    minZoom: 6, // Stops them from zooming out to see the whole world
+    maxBounds: bangladeshBounds, // Locks the map inside Bangladesh
+    maxBoundsViscosity: 1.0 // Adds a "bounce back" effect if they try to drag outside
+});
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-let mapMarkers = [];
+// 2. Initialize the Clustering Group
+let markersGroup = L.markerClusterGroup({
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+    zoomToBoundsOnClick: true
+});
 
-// 🧠 Smart Cache: Saves coordinates so we don't have to search the same uni twice!
+map.addLayer(markersGroup);
+
 let geoCache = JSON.parse(localStorage.getItem("geoCache")) || {
-    "DEFAULT": [23.7500, 90.3900] // Center of Dhaka as ultimate fallback
+    "DEFAULT": [23.7500, 90.3900] 
 };
 
-// Helper function to pause for 1 second (respects free API limits)
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 window.plotAlumniOnMap = async function(data) {
-    // 1. Clear old pins
-    mapMarkers.forEach(marker => map.removeLayer(marker));
-    mapMarkers = [];
+    // Clear out the old clusters when filtering/searching
+    markersGroup.clearLayers();
 
-    // 2. Loop through alumni data
     for (const alumnus of data) {
         const uniName = alumnus.university || alumnus.college;
-        
-        // Grab the location from your JSON! (e.g., "Laksam, Comilla, Bangladesh")
         const locationName = alumnus.location || ""; 
         
         if (!uniName) continue;
 
-        // Smart Query: Combine College AND Location. If no location, default to Bangladesh.
         let searchQuery = locationName ? `${uniName}, ${locationName}` : `${uniName}, Bangladesh`;
         let coords = geoCache[searchQuery];
 
-        // 3. If not in memory, ask OpenStreetMap
         if (!coords) {
             try {
                 await delay(1000); 
                 
-                // First Try: Look for the exact college in that exact area
                 const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
                 const result = await response.json();
 
@@ -390,8 +400,6 @@ window.plotAlumniOnMap = async function(data) {
                     geoCache[searchQuery] = coords; 
                     localStorage.setItem("geoCache", JSON.stringify(geoCache)); 
                 } else if (locationName) {
-                    // 🚨 SECOND TRY (YOUR FALLBACK): Just search for the City/Village!
-                    // Example: It couldn't find "Nawab Faizunnessa", so it just searches "Laksam, Comilla, Bangladesh"
                     const fallbackQuery = locationName;
                     await delay(1000);
                     const fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}`);
@@ -399,7 +407,7 @@ window.plotAlumniOnMap = async function(data) {
                     
                     if (fbResult && fbResult.length > 0) {
                         coords = [parseFloat(fbResult[0].lat), parseFloat(fbResult[0].lon)];
-                        geoCache[searchQuery] = coords; // Save it under the original search query so we don't have to search again
+                        geoCache[searchQuery] = coords; 
                         localStorage.setItem("geoCache", JSON.stringify(geoCache));
                     }
                 }
@@ -410,14 +418,8 @@ window.plotAlumniOnMap = async function(data) {
 
         if (!coords) coords = geoCache["DEFAULT"];
 
-        // 4. Jitter logic so pins don't stack directly on top of each other
-        const jitter = 0.006;
-        const finalCoords = [
-            coords[0] + (Math.random() - 0.5) * jitter,
-            coords[1] + (Math.random() - 0.5) * jitter
-        ];
-
-        const marker = L.marker(finalCoords).addTo(map);
+        // 3. Create the marker (No more jitter hack needed!)
+        const marker = L.marker(coords);
         
         marker.bindPopup(`
             <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px;">
@@ -431,6 +433,7 @@ window.plotAlumniOnMap = async function(data) {
             </div>
         `);
 
-        mapMarkers.push(marker);
+        // 4. Add the marker to the Cluster Group instead of directly to the map
+        markersGroup.addLayer(marker);
     }
 };
