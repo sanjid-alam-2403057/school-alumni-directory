@@ -337,6 +337,7 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.error('Service Worker Registration Failed!', err));
     });
 }
+
 // ==========================================
 // 🗺️ SMART AUTOMATIC MAP LOGIC (Clustered & Locked to BD)
 // ==========================================
@@ -418,16 +419,18 @@ window.plotAlumniOnMap = async function(data) {
 
         if (!coords) coords = geoCache["DEFAULT"];
 
-        // 3. Create the marker (No more jitter hack needed!)
-       // 🌟 NEW: Create a custom Snapchat-style pin using the alumnus photo!
+        // Determine theme colors based on developer status
+        const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; // Gold for dev, Blue for others
+        const pinNeedleColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
+
+        // 3. 🌟 NEW: Create a custom Snapchat-style pin using the alumnus photo!
         const customIcon = L.divIcon({
             className: 'custom-profile-pin',
             html: `
-                <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid #004aad; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid ${pinBorderColor}; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
                     <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/default-avatar.png'">
-                    ${alumnus.isDeveloper ? '<div style="position: absolute; bottom: -2px; right: -2px; background: gold; border-radius: 50%; width: 12px; height: 12px; border: 1px solid white;" title="Developer"></div>' : ''}
-                </div>
-                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #004aad; margin: 0 auto;"></div>
+                    </div>
+                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid ${pinNeedleColor}; margin: 0 auto;"></div>
             `,
             iconSize: [46, 54], // The total size of the pin
             iconAnchor: [23, 54], // The point that points exactly to the GPS location
@@ -437,11 +440,17 @@ window.plotAlumniOnMap = async function(data) {
         // Drop the custom photo pin!
         const marker = L.marker(coords, { icon: customIcon });
         
+        // Dynamic styling for the Popup card inside the map
+        const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 12px; padding: 10px;' : 'padding: 5px;';
+        const popupNameColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
+        const popupImageBorder = alumnus.isDeveloper ? '3px solid #FFD700' : '2px solid #004aad';
+
         marker.bindPopup(`
-            <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px;">
-                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #004aad; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
+            <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px; ${popupWrapperStyle}">
+                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
                 <br>
-                <strong style="color: #004aad; font-size: 1.1rem;">${alumnus.name}</strong><br>
+                <strong style="color: ${popupNameColor}; font-size: 1.1rem;">${alumnus.name}</strong><br>
+                ${alumnus.isDeveloper ? '<div class="developer-badge" style="display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
                 <span style="font-size: 0.85rem; color: #555;">${uniName}</span><br>
                 <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-top: 5px;">
                     Batch: ${alumnus.sscBatch}
