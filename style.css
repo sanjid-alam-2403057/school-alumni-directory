@@ -238,24 +238,35 @@ footer {
     }
 }
 
-/* --- THE DARK MODE THEME --- */
+/* --- THE DARK MODE THEME (NOW WITH !IMPORTANT TO FORCE COLORS) --- */
 body.dark-mode {
-    background-color: #111827; /* Dark background */
-    color: #f3f4f6;
+    background-color: #111827 !important; /* Force dark background */
+    color: #f3f4f6 !important; /* Force light text */
 }
 
 body.dark-mode .alumni-card {
-    background: #1f2937; /* Dark cards */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    border-top: 5px solid #3b82f6; 
+    background: #1f2937 !important; /* Force dark cards */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4) !important;
+    border-top: 5px solid #3b82f6 !important; 
 }
 
-body.dark-mode .alumni-card h2 { color: #f9fafb; }
-body.dark-mode .alumni-card p { color: #d1d5db; }
-body.dark-mode .alumni-card strong { color: #60a5fa; }
-body.dark-mode .alumni-card img { border-color: #1f2937; }
-body.dark-mode .badge { background-color: #374151; color: #93c5fd; }
-body.dark-mode footer { background-color: #0f172a; border-top: 4px solid #3b82f6; }
+/* Force text colors inside the card */
+body.dark-mode .alumni-card h2 { color: #f9fafb !important; }
+body.dark-mode .alumni-card p { color: #d1d5db !important; }
+body.dark-mode .alumni-card strong { color: #60a5fa !important; }
+body.dark-mode .alumni-card img { border-color: #1f2937 !important; }
+
+/* Force badge colors */
+body.dark-mode .badge { 
+    background-color: #374151 !important; 
+    color: #93c5fd !important; 
+}
+
+body.dark-mode footer { 
+    background-color: #0f172a !important; 
+    border-top: 4px solid #3b82f6 !important; 
+}
+
 /* --- SCROLL TO TOP BUTTON --- */
 .scroll-top-btn {
     display: none; /* Hidden by default until they scroll */
