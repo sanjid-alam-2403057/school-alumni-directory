@@ -95,9 +95,20 @@
     "whatsappCode": "880",
     "whatsappNum": "1757790817",
      "mentoring": true
-    
-    
-  },
+    },
+    {
+    "name": "Md Ismail hossen Rajib",
+    "university": "National university,Nawab Faizunnesa Government College",
+    "department": "Mathematics",
+    "admissionYear": 2024,
+    "sscBatch": 2021,
+    "photo": "images/rajib.jpg",
+   "emailUser": "mdismailhossen33045", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1308739889",
+     "mentoring": true
+    },
   {
     "name": "Sanjid Alam",
     "university": "Rajshahi University of Engineering & Technology",
