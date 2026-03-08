@@ -486,34 +486,56 @@ window.plotAlumniOnMap = async function(data) {
 // ==========================================
 // 🪪 DIGITAL ID CARD GENERATOR LOGIC
 // ==========================================
+// ==========================================
+// 🪪 DIGITAL ID CARD GENERATOR LOGIC (WITH QR CODE)
+// ==========================================
 window.generateIDCard = function(name, photo, uni, dept, batch, admitted, buttonElement) {
     const originalText = buttonElement.innerHTML;
     buttonElement.innerHTML = "⏳ Generating...";
     buttonElement.disabled = true;
     buttonElement.style.opacity = "0.7";
 
+    // 1. Populate text data
     document.getElementById('id-card-name').textContent = name;
     document.getElementById('id-card-uni').textContent = uni;
     document.getElementById('id-card-dept').textContent = dept;
     document.getElementById('id-card-batch').textContent = batch;
     document.getElementById('id-card-admitted').textContent = admitted;
     
+    // 2. Generate the QR Code (Formats as a vCard so phones can save it as a contact!)
+    const qrContainer = document.getElementById('id-card-qrcode');
+    qrContainer.innerHTML = ""; // Clear any previous QR code
+    
+    const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${uni}\nNOTE:Dept: ${dept} | Batch: ${batch}\nEND:VCARD`;
+    
+    new QRCode(qrContainer, {
+        text: vCardData,
+        width: 70,  // You can adjust the size here
+        height: 70,
+        colorDark : "#004aad", // Using your brand blue for the QR code!
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.L
+    });
+
+    // 3. Handle the Profile Photo
     const photoElement = document.getElementById('id-card-photo');
     photoElement.src = photo;
 
     photoElement.onload = function() {
-        takeScreenshotAndDownload();
+        // Adding a tiny 100ms delay to ensure the QR code canvas finishes drawing
+        setTimeout(takeScreenshotAndDownload, 100);
     };
     
     photoElement.onerror = function() {
         photoElement.src = 'images/default-avatar.png';
-        takeScreenshotAndDownload();
+        setTimeout(takeScreenshotAndDownload, 100);
     };
 
     if (photoElement.complete) {
-        takeScreenshotAndDownload();
+        setTimeout(takeScreenshotAndDownload, 100);
     }
 
+    // 4. Capture and Download
     function takeScreenshotAndDownload() {
         const cardTemplate = document.getElementById('id-card-template');
 
