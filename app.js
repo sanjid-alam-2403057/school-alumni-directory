@@ -375,96 +375,128 @@ let geoCache = JSON.parse(localStorage.getItem("geoCache")) || {
 };
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
-
 window.plotAlumniOnMap = async function(data) {
+    // --- 1. SHOW THE "UPDATING MAP" OVERLAY ---
+    let mapContainer = document.getElementById('alumniMap');
+    let mapLoadingOverlay = document.getElementById('mapLoadingOverlay');
+    
+    // Create the overlay dynamically if it doesn't exist yet
+    if (!mapLoadingOverlay && mapContainer) {
+        mapLoadingOverlay = document.createElement('div');
+        mapLoadingOverlay.id = 'mapLoadingOverlay';
+        mapLoadingOverlay.innerHTML = `
+            <div style="width: 35px; height: 35px; border: 4px solid #e2e8f0; border-top: 4px solid #004aad; border-radius: 50%; animation: mapSpin 1s linear infinite;"></div>
+            <span style="margin-left: 12px; font-weight: 600; color: #004aad; font-family: 'Poppins', sans-serif; font-size: 1.1rem; text-shadow: 0px 0px 5px white;">Updating Map...</span>
+        `;
+        // Styling to make it float over the map with a blur effect
+        mapLoadingOverlay.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.6); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(3px); border-radius: inherit; transition: opacity 0.3s ease;';
+        
+        // Add the CSS animation for the spinner
+        const style = document.createElement('style');
+        style.innerHTML = '@keyframes mapSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+        document.head.appendChild(style);
+        
+        mapContainer.appendChild(mapLoadingOverlay);
+    }
+    
+    // Make sure it is visible when the function starts
+    if (mapLoadingOverlay) mapLoadingOverlay.style.display = 'flex';
+
     // Clear out the old clusters when filtering/searching
     markersGroup.clearLayers();
 
-    for (const alumnus of data) {
-        const uniName = alumnus.university || alumnus.college;
-        const locationName = alumnus.location || ""; 
-        
-        if (!uniName) continue;
+    try {
+        for (const alumnus of data) {
+            const uniName = alumnus.university || alumnus.college;
+            const locationName = alumnus.location || ""; 
+            
+            if (!uniName) continue;
 
-        let searchQuery = locationName ? `${uniName}, ${locationName}` : `${uniName}, Bangladesh`;
-        let coords = geoCache[searchQuery];
+            let searchQuery = locationName ? `${uniName}, ${locationName}` : `${uniName}, Bangladesh`;
+            let coords = geoCache[searchQuery];
 
-        if (!coords) {
-            try {
-                await delay(1000); 
-                
-                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
-                const result = await response.json();
-
-                if (result && result.length > 0) {
-                    coords = [parseFloat(result[0].lat), parseFloat(result[0].lon)];
-                    geoCache[searchQuery] = coords; 
-                    localStorage.setItem("geoCache", JSON.stringify(geoCache)); 
-                } else if (locationName) {
-                    const fallbackQuery = locationName;
-                    await delay(1000);
-                    const fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}`);
-                    const fbResult = await fbResponse.json();
+            if (!coords) {
+                try {
+                    await delay(1000); 
                     
-                    if (fbResult && fbResult.length > 0) {
-                        coords = [parseFloat(fbResult[0].lat), parseFloat(fbResult[0].lon)];
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
+                    const result = await response.json();
+
+                    if (result && result.length > 0) {
+                        coords = [parseFloat(result[0].lat), parseFloat(result[0].lon)];
                         geoCache[searchQuery] = coords; 
-                        localStorage.setItem("geoCache", JSON.stringify(geoCache));
+                        localStorage.setItem("geoCache", JSON.stringify(geoCache)); 
+                    } else if (locationName) {
+                        const fallbackQuery = locationName;
+                        await delay(1000);
+                        const fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}`);
+                        const fbResult = await fbResponse.json();
+                        
+                        if (fbResult && fbResult.length > 0) {
+                            coords = [parseFloat(fbResult[0].lat), parseFloat(fbResult[0].lon)];
+                            geoCache[searchQuery] = coords; 
+                            localStorage.setItem("geoCache", JSON.stringify(geoCache));
+                        }
                     }
+                } catch (error) {
+                    console.warn(`Could not find coordinates for: ${uniName}`);
                 }
-            } catch (error) {
-                console.warn(`Could not find coordinates for: ${uniName}`);
             }
-        }
 
-        if (!coords) coords = geoCache["DEFAULT"];
+            if (!coords) coords = geoCache["DEFAULT"];
 
-        // Determine theme colors based on developer status
-        const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; 
-        const pinNeedleColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
+            // Determine theme colors based on developer status
+            const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; 
+            const pinNeedleColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
 
-        // Create a custom Snapchat-style pin using the alumnus photo
-        const customIcon = L.divIcon({
-            className: 'custom-profile-pin',
-            html: `
-                <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid ${pinBorderColor}; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
-                    <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/default-avatar.png'">
+            // Create a custom Snapchat-style pin using the alumnus photo
+            const customIcon = L.divIcon({
+                className: 'custom-profile-pin',
+                html: `
+                    <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid ${pinBorderColor}; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
+                        <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/default-avatar.png'">
+                    </div>
+                    <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid ${pinNeedleColor}; margin: 0 auto;"></div>
+                `,
+                iconSize: [46, 54], 
+                iconAnchor: [23, 54], 
+                popupAnchor: [0, -50] 
+            });
+
+            const marker = L.marker(coords, { icon: customIcon });
+            
+            // Dynamic styling for the Popup card inside the map (Mobile Optimized)
+            const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 8px; padding: 8px;' : 'padding: 5px;';
+            const popupNameColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
+            const popupImageBorder = alumnus.isDeveloper ? '3px solid #FFD700' : '2px solid #004aad';
+
+            const popupContent = `
+                <div style="font-family: 'Poppins', sans-serif; text-align: center; width: 100%; word-wrap: break-word; box-sizing: border-box; ${popupWrapperStyle}">
+                    <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
+                    <br>
+                    <strong style="color: ${popupNameColor}; font-size: 1.1rem; display: block; line-height: 1.2; margin-bottom: 4px;">${alumnus.name}</strong>
+                    ${alumnus.isDeveloper ? '<div style="background: #FFD700; color: #000; padding: 3px 8px; border-radius: 12px; font-weight: bold; display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
+                    <span style="font-size: 0.85rem; color: #555; display: block; margin-bottom: 4px;">${uniName}</span>
+                    <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block;">
+                        Batch: ${alumnus.sscBatch}
+                    </span>
                 </div>
-                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid ${pinNeedleColor}; margin: 0 auto;"></div>
-            `,
-            iconSize: [46, 54], 
-            iconAnchor: [23, 54], 
-            popupAnchor: [0, -50] 
-        });
+            `;
 
-        const marker = L.marker(coords, { icon: customIcon });
-        
-        // Dynamic styling for the Popup card inside the map (Mobile Optimized)
-        const popupWrapperStyle = alumnus.isDeveloper ? 'border-top: 4px solid #FFD700; border-radius: 8px; padding: 8px;' : 'padding: 5px;';
-        const popupNameColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
-        const popupImageBorder = alumnus.isDeveloper ? '3px solid #FFD700' : '2px solid #004aad';
+            // Bind popup with specific Leaflet options to fix mobile overlap
+            marker.bindPopup(popupContent, {
+                maxWidth: 220,     // Prevents it from stretching too wide
+                minWidth: 140,     // Keeps it structured
+                autoPanPaddingTopLeft: [50, 50], // Forces map to push the popup away from zoom controls!
+                autoPanPaddingBottomRight: [50, 50]
+            });
 
-        const popupContent = `
-            <div style="font-family: 'Poppins', sans-serif; text-align: center; width: 100%; word-wrap: break-word; box-sizing: border-box; ${popupWrapperStyle}">
-                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: ${popupImageBorder}; margin-bottom: 5px;" onerror="this.src='images/default-avatar.png'">
-                <br>
-                <strong style="color: ${popupNameColor}; font-size: 1.1rem; display: block; line-height: 1.2; margin-bottom: 4px;">${alumnus.name}</strong>
-                ${alumnus.isDeveloper ? '<div style="background: #FFD700; color: #000; padding: 3px 8px; border-radius: 12px; font-weight: bold; display:inline-block; font-size:0.7rem; margin-bottom:5px;">👨‍💻 Lead Developer</div><br>' : ''}
-                <span style="font-size: 0.85rem; color: #555; display: block; margin-bottom: 4px;">${uniName}</span>
-                <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block;">
-                    Batch: ${alumnus.sscBatch}
-                </span>
-            </div>
-        `;
-
-        // Bind popup with specific Leaflet options to fix mobile overlap
-        marker.bindPopup(popupContent, {
-            maxWidth: 220,     // Prevents it from stretching too wide
-            minWidth: 140,     // Keeps it structured
-            autoPanPaddingTopLeft: [50, 50], // Forces map to push the popup away from zoom controls!
-            autoPanPaddingBottomRight: [50, 50]
-        });
-
-        markersGroup.addLayer(marker);
+            markersGroup.addLayer(marker);
+        }
+    } finally {
+        // --- 2. HIDE THE OVERLAY WHEN FINISHED ---
+        if (mapLoadingOverlay) {
+            mapLoadingOverlay.style.display = 'none';
+        }
     }
 };
