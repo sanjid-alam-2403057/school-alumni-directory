@@ -366,18 +366,22 @@ window.plotAlumniOnMap = async function(data) {
     // 2. Loop through alumni data
     for (const alumnus of data) {
         const uniName = alumnus.university || alumnus.college;
+        
+        // Grab the location from your JSON! (e.g., "Laksam, Comilla, Bangladesh")
         const locationName = alumnus.location || ""; 
         
         if (!uniName) continue;
 
-        let searchQuery = `${uniName}, Bangladesh`;
+        // Smart Query: Combine College AND Location. If no location, default to Bangladesh.
+        let searchQuery = locationName ? `${uniName}, ${locationName}` : `${uniName}, Bangladesh`;
         let coords = geoCache[searchQuery];
 
-        // 3. If we haven't searched this uni before, ask the OpenStreetMap API
+        // 3. If not in memory, ask OpenStreetMap
         if (!coords) {
             try {
                 await delay(1000); 
                 
+                // First Try: Look for the exact college in that exact area
                 const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
                 const result = await response.json();
 
@@ -386,19 +390,21 @@ window.plotAlumniOnMap = async function(data) {
                     geoCache[searchQuery] = coords; 
                     localStorage.setItem("geoCache", JSON.stringify(geoCache)); 
                 } else if (locationName) {
-                    const fallbackQuery = `${locationName}, Bangladesh`;
+                    // 🚨 SECOND TRY (YOUR FALLBACK): Just search for the City/Village!
+                    // Example: It couldn't find "Nawab Faizunnessa", so it just searches "Laksam, Comilla, Bangladesh"
+                    const fallbackQuery = locationName;
                     await delay(1000);
                     const fbResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackQuery)}`);
                     const fbResult = await fbResponse.json();
                     
                     if (fbResult && fbResult.length > 0) {
                         coords = [parseFloat(fbResult[0].lat), parseFloat(fbResult[0].lon)];
-                        geoCache[searchQuery] = coords; 
+                        geoCache[searchQuery] = coords; // Save it under the original search query so we don't have to search again
                         localStorage.setItem("geoCache", JSON.stringify(geoCache));
                     }
                 }
             } catch (error) {
-                console.warn(`Could not automatically find coordinates for: ${uniName}`);
+                console.warn(`Could not find coordinates for: ${uniName}`);
             }
         }
 
