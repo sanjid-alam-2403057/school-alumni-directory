@@ -419,7 +419,23 @@ window.plotAlumniOnMap = async function(data) {
         if (!coords) coords = geoCache["DEFAULT"];
 
         // 3. Create the marker (No more jitter hack needed!)
-        const marker = L.marker(coords);
+       // 🌟 NEW: Create a custom Snapchat-style pin using the alumnus photo!
+        const customIcon = L.divIcon({
+            className: 'custom-profile-pin',
+            html: `
+                <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 3px solid #004aad; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative;">
+                    <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/default-avatar.png'">
+                    ${alumnus.isDeveloper ? '<div style="position: absolute; bottom: -2px; right: -2px; background: gold; border-radius: 50%; width: 12px; height: 12px; border: 1px solid white;" title="Developer"></div>' : ''}
+                </div>
+                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #004aad; margin: 0 auto;"></div>
+            `,
+            iconSize: [46, 54], // The total size of the pin
+            iconAnchor: [23, 54], // The point that points exactly to the GPS location
+            popupAnchor: [0, -50] // Where the popup bubble opens relative to the pin
+        });
+
+        // Drop the custom photo pin!
+        const marker = L.marker(coords, { icon: customIcon });
         
         marker.bindPopup(`
             <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px;">
