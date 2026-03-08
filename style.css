@@ -891,3 +891,20 @@ body.dark-mode .copy-number-btn:hover { background-color: #334155; color: white;
         box-sizing: border-box;
     }
 }
+/* =========================================
+   🔄 LOADING SPINNER
+   ========================================= */
+.spinner {
+    border: 5px solid #f3f3f3; /* Light grey background */
+    border-top: 5px solid #ff9800; /* Orange spinning part */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 40px auto; /* Centers it on the screen */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
