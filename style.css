@@ -1143,3 +1143,10 @@ body.dark-mode .leaflet-popup-content span {
     border-radius: 10px;
     display: inline-block;
 }
+.qr-code-box {
+    background: white;
+    padding: 6px;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
