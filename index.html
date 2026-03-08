@@ -96,16 +96,47 @@
         <button id="loadMoreBtn" class="load-more-btn" style="display: none;">Load More Alumni ⬇️</button>
     </div>
 
-    <footer>
+   <footer>
         <div class="footer-content">
             <p>&copy; 2026 Our School Alumni. All rights reserved.</p>
             <p>Developed by<strong> Sanjid Alam </strong><br>
             Department of CSE, RUET</p>
+            
+            <div class="support-dev-container">
+                <button id="supportBtn" class="support-btn">
+                    ☕ Support the Developer
+                </button>
+            </div>
         </div>
     </footer>
     
     <button id="scrollToTopBtn" class="scroll-top-btn" title="Go to top">⬆️</button>
-    
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-modal-content">
+            <span id="closePaymentModal" class="close-payment-btn">&times;</span>
+            <h2>Support the Project ❤️</h2>
+            <p style="margin-bottom: 20px; color: #64748b;">If this directory helped you reconnect, consider buying the developer a coffee!</p>
+            
+            <div class="payment-methods">
+                <div class="payment-card bkash-card">
+                    <h3>bKash (Personal)</h3>
+                    <p class="phone-number">01863232179</p> 
+                    <button class="copy-number-btn" onclick="copyPaymentNumber('01863232179', this)">📋 Copy bKash</button>
+                </div>
+                
+                <div class="payment-card nagad-card">
+                    <h3>Nagad (Personal)</h3>
+                    <p class="phone-number">01863232179</p> 
+                    <button class="copy-number-btn" onclick="copyPaymentNumber('01863232179', this)">📋 Copy Nagad</button>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-weight: bold;">Thank you for your support! 🎉</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
     <script src="app.js"></script>
 </body>
 </html>
