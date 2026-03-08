@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("total-departments").textContent = uniqueStudy;
     }
 });
-
+// --- SHARE PROFILE LOGIC ---
 window.shareProfile = function(buttonElement, name, institution) {
     const websiteUrl = window.location.href.split('?')[0]; 
     const textToCopy = `Check out ${name} from ${institution} on our Alumni Directory! ${websiteUrl}`;
@@ -253,6 +253,51 @@ window.shareProfile = function(buttonElement, name, institution) {
         setTimeout(() => {
             buttonElement.innerHTML = originalText;
             buttonElement.style.backgroundColor = "";
+            buttonElement.style.color = "";
+            buttonElement.style.borderColor = "";
+        }, 2000);
+    });
+}; // <-- THIS BRACKET WAS MISSING! It closes the shareProfile function.
+
+
+// --- BKASH/NAGAD POP-UP LOGIC ---
+document.addEventListener("DOMContentLoaded", () => {
+    const paymentModal = document.getElementById("paymentModal");
+    const supportBtn = document.getElementById("supportBtn");
+    const closePaymentModal = document.getElementById("closePaymentModal");
+
+    if (supportBtn && paymentModal) {
+        // Open modal when button is clicked
+        supportBtn.addEventListener("click", () => {
+            paymentModal.style.display = "flex";
+        });
+
+        // Close modal when X is clicked
+        closePaymentModal.addEventListener("click", () => {
+            paymentModal.style.display = "none";
+        });
+
+        // Close modal when clicking anywhere outside of it
+        window.addEventListener("click", (e) => {
+            if (e.target === paymentModal) {
+                paymentModal.style.display = "none";
+            }
+        });
+    }
+});
+
+// Function to copy the bKash/Nagad number
+window.copyPaymentNumber = function(number, buttonElement) {
+    navigator.clipboard.writeText(number).then(() => {
+        const originalText = buttonElement.innerHTML;
+        buttonElement.innerHTML = "✅ Copied!";
+        buttonElement.style.backgroundColor = "#25D366";
+        buttonElement.style.color = "white";
+        buttonElement.style.borderColor = "#25D366";
+        
+        setTimeout(() => {
+            buttonElement.innerHTML = originalText;
+            buttonElement.style.backgroundColor = "transparent";
             buttonElement.style.color = "";
             buttonElement.style.borderColor = "";
         }, 2000);
