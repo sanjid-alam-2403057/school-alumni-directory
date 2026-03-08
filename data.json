@@ -1,5 +1,18 @@
 [
    {
+    "name": "Abdul Maleque Shuvo",
+    "university": "European University Of Bangladesh",
+    "department": "EEE",
+    "admissionYear": 2017,
+    "sscBatch": 2012,
+    "photo": "images/malek.jpeg",
+   "emailUser": "abdulmalekshuvo", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1676396626",
+      
+  },
+   {
     "name": "MD Arafat Rahman Parvez",
     "university": "University of Victoria",
     "department": "Microbiology",
