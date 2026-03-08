@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadMoreBtn = document.getElementById("loadMoreBtn"); 
     const filterPublicBtn = document.getElementById("filterPublic"); 
     
-    // NEW: Grab the dropdown menus
+    // Grab the dropdown menus
     const universityFilter = document.getElementById("universityFilter");
     const batchFilter = document.getElementById("batchFilter");
     
@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
+   // Fetch data from live Google Sheet
    fetch("https://script.google.com/macros/s/AKfycbwFE0-uQhfi9ogxwAzVUlBB0ZHIEy_n8EPBb9mGKyX29dOgy4cohxiiutkcK5hHOxsx/exec")
         .then(response => response.json())
         .then(data => {
@@ -40,11 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
             container.innerHTML = "<p style='text-align:center; color:red; width:100%;'>Error loading data. Please try again later.</p>";
         });
 
-   // NEW FUNCTION: Automatically fill dropdowns with unique data
+   // Automatically fill dropdowns with unique data
     function populateDropdowns(data) {
         if (!universityFilter || !batchFilter) return;
 
-        // 🛑 THE FIX: Clear out any existing options first so they don't duplicate!
+        // Clear out any existing options first so they don't duplicate!
         universityFilter.innerHTML = '<option value="">🏫 All Institutions</option>';
         batchFilter.innerHTML = '<option value="">📅 All Batches</option>';
 
@@ -87,12 +88,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 card.className = "alumni-card";
             }
             
-            const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
-                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` : "";
+            // SMART LOGIC: Group vs Department
+            let studyLabel = "Department"; 
+            let studyValue = alumnus.department || alumnus.group || "N/A"; 
+            let lowerStudy = studyValue.toLowerCase();
+
+            if (lowerStudy.includes("science") || lowerStudy.includes("commerce") || lowerStudy.includes("arts") || lowerStudy.includes("humanities") || lowerStudy.includes("business")) {
+                studyLabel = "Group";
+            }
+            
+            // SIMPLIFIED BUTTONS: Grabbing the full string from the sheet
+            const emailButton = (alumnus.email) ? 
+                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.email}'">✉️ Email</button>` : "";
 
             const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
-            const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
-                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` : "";
+            const whatsappButton = (alumnus.whatsapp) ? 
+                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsapp}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` : "";
 
             const callButton = (alumnus.phoneCode && alumnus.phoneNum) ? 
                 `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` : "";
@@ -102,10 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const publicTag = alumnus.isPublic ? `<span class="public-badge">🏛️ Public</span>` : "";
             const developerBadge = alumnus.isDeveloper ? `<div class="developer-badge">👨‍💻 Lead Developer</div><br>` : "";
 
-            const institutionLabel = alumnus.university ? "University" : "College";
             const institutionValue = alumnus.university || alumnus.college || "N/A";
-            const studyLabel = alumnus.department ? "Department" : "Group";
-            const studyValue = alumnus.department || alumnus.group || "N/A";
 
             card.innerHTML = `
                 ${newArrivalBadge}
@@ -113,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <img src="${alumnus.photo}" alt="Photo of ${alumnus.name}">
                 <h2>${alumnus.name}</h2>
                 ${developerBadge}
-                <p><strong>${institutionLabel}:</strong> ${institutionValue} ${publicTag}</p>
+                <p><strong>Institution:</strong> ${institutionValue} ${publicTag}</p>
                 <p><strong>${studyLabel}:</strong> ${studyValue}</p>
                 <p><strong>Admission:</strong> ${alumnus.admissionYear}</p>
                 <div class="badge">SSC Batch: ${alumnus.sscBatch}</div>
@@ -138,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // NEW FUNCTION: The Master Filter! Handles search bar AND dropdowns together.
+    // The Master Filter! Handles search bar AND dropdowns together.
     function applyFilters() {
         const searchString = searchInput.value.toLowerCase();
         const selectedUni = universityFilter ? universityFilter.value : "";
@@ -235,11 +243,11 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    
-
     function updateDashboard(data) {
         const totalAlumni = data.length;
         const uniqueInstitutions = new Set(data.map(a => a.university || a.college).filter(Boolean)).size;
+        
+        // Smart count for dashboard: Count unique departments OR groups
         const uniqueStudy = new Set(data.map(a => a.department || a.group).filter(Boolean)).size;
 
         document.getElementById("total-alumni").textContent = totalAlumni;
@@ -247,6 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("total-departments").textContent = uniqueStudy;
     }
 });
+
 // --- SHARE PROFILE LOGIC ---
 window.shareProfile = function(buttonElement, name, institution) {
     const websiteUrl = window.location.href.split('?')[0]; 
@@ -266,8 +275,7 @@ window.shareProfile = function(buttonElement, name, institution) {
             buttonElement.style.borderColor = "";
         }, 2000);
     });
-}; // <-- THIS BRACKET WAS MISSING! It closes the shareProfile function.
-
+};
 
 // --- BKASH/NAGAD POP-UP LOGIC ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -276,17 +284,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const closePaymentModal = document.getElementById("closePaymentModal");
 
     if (supportBtn && paymentModal) {
-        // Open modal when button is clicked
         supportBtn.addEventListener("click", () => {
             paymentModal.style.display = "flex";
         });
 
-        // Close modal when X is clicked
         closePaymentModal.addEventListener("click", () => {
             paymentModal.style.display = "none";
         });
 
-        // Close modal when clicking anywhere outside of it
         window.addEventListener("click", (e) => {
             if (e.target === paymentModal) {
                 paymentModal.style.display = "none";
@@ -295,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Function to copy the bKash/Nagad number
 window.copyPaymentNumber = function(number, buttonElement) {
     navigator.clipboard.writeText(number).then(() => {
         const originalText = buttonElement.innerHTML;
@@ -312,6 +316,7 @@ window.copyPaymentNumber = function(number, buttonElement) {
         }, 2000);
     });
 };
+
 // --- PWA SERVICE WORKER REGISTRATION ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
