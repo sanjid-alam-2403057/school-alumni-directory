@@ -38,7 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const spinner = document.getElementById("loadingSpinner");
             if (spinner) spinner.style.display = "none";
             
-            container.innerHTML = "<p style='text-align:center; color:red; width:100%;'>Error loading data. Please try again later.</p>";
+            if (container) {
+                container.innerHTML = "<p style='text-align:center; color:red; width:100%;'>Error loading data. Please try again later.</p>";
+            }
         });
 
    // Automatically fill dropdowns with unique data
@@ -69,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function displayAlumni(data) {
+        if (!container) return; // Safety check
         container.innerHTML = ""; 
 
         if (data.length === 0) {
@@ -97,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 studyLabel = "Group";
             }
             
-            // REVERTED BUTTONS: Using your original JSON variables
+            // BUTTONS: Using your original JSON variables
             const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
                 `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` : "";
 
@@ -148,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // The Master Filter! Handles search bar AND dropdowns together.
     function applyFilters() {
-        const searchString = searchInput.value.toLowerCase();
+        const searchString = searchInput ? searchInput.value.toLowerCase() : "";
         const selectedUni = universityFilter ? universityFilter.value : "";
         const selectedBatch = batchFilter ? batchFilter.value.toString() : "";
 
@@ -174,11 +177,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Event Listeners for Filters
-    searchInput.addEventListener("input", applyFilters);
+    if (searchInput) searchInput.addEventListener("input", applyFilters);
     if (universityFilter) universityFilter.addEventListener("change", applyFilters);
     if (batchFilter) batchFilter.addEventListener("change", applyFilters);
 
-    if(filterPublicBtn) {
+    if (filterPublicBtn) {
         filterPublicBtn.addEventListener("click", () => {
             isPublicFilterActive = !isPublicFilterActive; 
             if (isPublicFilterActive) {
@@ -192,67 +195,82 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    if(loadMoreBtn) {
+    if (loadMoreBtn) {
         loadMoreBtn.addEventListener("click", () => {
             currentlyShowing += itemsPerPage; 
             displayAlumni(currentDisplayData); 
         });
     }
 
-    sortNameBtn.addEventListener("click", () => {
-        currentDisplayData.sort((a, b) => a.name.localeCompare(b.name));
-        currentlyShowing = itemsPerPage; 
-        displayAlumni(currentDisplayData);
-    });
+    if (sortNameBtn) {
+        sortNameBtn.addEventListener("click", () => {
+            currentDisplayData.sort((a, b) => a.name.localeCompare(b.name));
+            currentlyShowing = itemsPerPage; 
+            displayAlumni(currentDisplayData);
+        });
+    }
 
-    sortBatchBtn.addEventListener("click", () => {
-        currentDisplayData.sort((a, b) => b.sscBatch - a.sscBatch);
-        currentlyShowing = itemsPerPage; 
-        displayAlumni(currentDisplayData);
-    });
+    if (sortBatchBtn) {
+        sortBatchBtn.addEventListener("click", () => {
+            currentDisplayData.sort((a, b) => b.sscBatch - a.sscBatch);
+            currentlyShowing = itemsPerPage; 
+            displayAlumni(currentDisplayData);
+        });
+    }
 
+    // --- DARK MODE LOGIC (Now safely wrapped!) ---
     const darkModeToggle = document.getElementById("darkModeToggle");
     const body = document.body;
 
-    if (localStorage.getItem("theme") === "dark") {
-        body.classList.add("dark-mode");
-        darkModeToggle.textContent = "☀️"; 
+    if (darkModeToggle) {
+        if (localStorage.getItem("theme") === "dark") {
+            body.classList.add("dark-mode");
+            darkModeToggle.textContent = "☀️"; 
+        }
+
+        darkModeToggle.addEventListener("click", () => {
+            body.classList.toggle("dark-mode");
+            if (body.classList.contains("dark-mode")) {
+                darkModeToggle.textContent = "☀️";
+                localStorage.setItem("theme", "dark");
+            } else {
+                darkModeToggle.textContent = "🌙";
+                localStorage.setItem("theme", "light");
+            }
+        });
     }
 
-    darkModeToggle.addEventListener("click", () => {
-        body.classList.toggle("dark-mode");
-        if (body.classList.contains("dark-mode")) {
-            darkModeToggle.textContent = "☀️";
-            localStorage.setItem("theme", "dark");
-        } else {
-            darkModeToggle.textContent = "🌙";
-            localStorage.setItem("theme", "light");
-        }
-    });
-
+    // --- SCROLL TO TOP LOGIC ---
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-    window.addEventListener("scroll", () => {
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            scrollToTopBtn.style.display = "block";
-        } else {
-            scrollToTopBtn.style.display = "none";
-        }
-    });
+    
+    if (scrollToTopBtn) {
+        window.addEventListener("scroll", () => {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        });
 
-    scrollToTopBtn.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+        scrollToTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
 
     function updateDashboard(data) {
+        const totalAlumniElement = document.getElementById("total-alumni");
+        const totalUniversitiesElement = document.getElementById("total-universities");
+        const totalDepartmentsElement = document.getElementById("total-departments");
+
         const totalAlumni = data.length;
         const uniqueInstitutions = new Set(data.map(a => a.university || a.college).filter(Boolean)).size;
         
         // Smart count for dashboard: Count unique departments OR groups
         const uniqueStudy = new Set(data.map(a => a.department || a.group).filter(Boolean)).size;
 
-        document.getElementById("total-alumni").textContent = totalAlumni;
-        document.getElementById("total-universities").textContent = uniqueInstitutions;
-        document.getElementById("total-departments").textContent = uniqueStudy;
+        if (totalAlumniElement) totalAlumniElement.textContent = totalAlumni;
+        if (totalUniversitiesElement) totalUniversitiesElement.textContent = uniqueInstitutions;
+        if (totalDepartmentsElement) totalDepartmentsElement.textContent = uniqueStudy;
     }
 });
 
@@ -283,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const supportBtn = document.getElementById("supportBtn");
     const closePaymentModal = document.getElementById("closePaymentModal");
 
-    if (supportBtn && paymentModal) {
+    if (supportBtn && paymentModal && closePaymentModal) {
         supportBtn.addEventListener("click", () => {
             paymentModal.style.display = "flex";
         });
