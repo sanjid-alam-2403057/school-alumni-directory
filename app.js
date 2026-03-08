@@ -342,41 +342,76 @@ if ('serviceWorker' in navigator) {
             .then(reg => console.log('Service Worker Registered!', reg))
             .catch(err => console.error('Service Worker Registration Failed!', err));
     });
-}
-// ==========================================
-// 🗺️ INTERACTIVE ALUMNI MAP LOGIC
+}// ==========================================
+// 🗺️ INTERACTIVE ALUMNI MAP LOGIC (REAL DATA)
 // ==========================================
 
-// 1. Initialize the map and set the view to Bangladesh (Latitude, Longitude, Zoom Level)
 const map = L.map('alumniMap').setView([23.6850, 90.3563], 7);
 
-// 2. Load the free OpenStreetMap tiles (the actual visual map)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// 3. Dummy Data Array (We will connect this to your Google Sheet later!)
-const mapData = [
-    { name: "Sanjid Alam", batch: "SSC 2021", uni: "RUET", location: "Rajshahi", coords: [24.3745, 88.6042] },
-    { name: "Rahim Uddin", batch: "SSC 2019", uni: "BUET", location: "Dhaka", coords: [23.7270, 90.3920] },
-    { name: "Ayesha Siddiqua", batch: "SSC 2020", uni: "CUET", location: "Chittagong", coords: [22.4604, 91.9715] },
-    { name: "Tanvir Hasan", batch: "SSC 2018", uni: "SUST", location: "Sylhet", coords: [24.9193, 91.8316] }
-];
+// 📖 GPS Dictionary: Add your most common universities here!
+const universityCoords = {
+    "RUET": [24.3745, 88.6042],
+    "BUET": [23.7270, 90.3920],
+    "CUET": [22.4604, 91.9715],
+    "KUET": [22.8996, 89.5020],
+    "SUST": [24.9193, 91.8316],
+    "Dhaka University": [23.7330, 90.3928],
+    "Rajshahi University": [24.3698, 88.6368],
+    "Chittagong University": [22.4704, 91.7896],
+    "Jahangirnagar University": [23.8805, 90.2676],
+    "NSU": [23.8151, 90.4255],
+    "BRAC": [23.7803, 90.4069],
+    "IUT": [23.9482, 90.3793],
+    "MIST": [23.8378, 90.3578],
+    // If someone's uni isn't on the list, it drops them in the center of Dhaka
+    "DEFAULT": [23.7500, 90.3900] 
+};
 
-// 4. Loop through the data and place pins on the map
-mapData.forEach(alumni => {
-    // Drop the pin
-    const marker = L.marker(alumni.coords).addTo(map);
-    
-    // Create the pop-up bubble for when someone clicks the pin
-    marker.bindPopup(`
-        <div style="font-family: 'Poppins', sans-serif; text-align: center;">
-            <strong style="color: #004aad; font-size: 1.1rem;">${alumni.name}</strong><br>
-            <span style="font-size: 0.9rem; color: #555;">${alumni.uni}</span><br>
-            <span style="font-size: 0.8rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-top: 5px;">
-                ${alumni.batch}
-            </span>
-        </div>
-    `);
-});
+// Array to store active pins (so we can clear them when searching)
+let mapMarkers = [];
+
+// 🚀 The function that plots your real data
+window.plotAlumniOnMap = function(data) {
+    // 1. Clear the old pins off the map
+    mapMarkers.forEach(marker => map.removeLayer(marker));
+    mapMarkers = [];
+
+    // 2. Loop through your real alumni data
+    data.forEach(alumnus => {
+        const uniName = alumnus.university || alumnus.college;
+        if (!uniName) return; 
+
+        // 3. Look up the GPS coordinates, or use the DEFAULT if not found
+        let baseCoords = universityCoords[uniName] || universityCoords["DEFAULT"];
+
+        // 4. "Jitter" the pins slightly so people at the same uni don't overlap completely
+        const jitter = 0.006;
+        const finalCoords = [
+            baseCoords[0] + (Math.random() - 0.5) * jitter,
+            baseCoords[1] + (Math.random() - 0.5) * jitter
+        ];
+
+        // 5. Drop the pin!
+        const marker = L.marker(finalCoords).addTo(map);
+        
+        // 6. Create a beautiful pop-up featuring their actual photo and data
+        marker.bindPopup(`
+            <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 140px;">
+                <img src="${alumnus.photo || 'images/default-avatar.png'}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #004aad; margin-bottom: 5px;">
+                <br>
+                <strong style="color: #004aad; font-size: 1.1rem;">${alumnus.name}</strong><br>
+                <span style="font-size: 0.85rem; color: #555;">${uniName}</span><br>
+                <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-top: 5px;">
+                    Batch: ${alumnus.sscBatch}
+                </span>
+            </div>
+        `);
+
+        mapMarkers.push(marker);
+    });
+};
