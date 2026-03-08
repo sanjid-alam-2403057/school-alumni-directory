@@ -661,3 +661,29 @@ body.dark-mode .public-badge {
 body.dark-mode .developer-card {
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
 }
+/* --- ADVANCED DROPDOWN FILTERS --- */
+.dropdown-filter {
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    background-color: #ffffff;
+    color: #0f172a;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin: 5px;
+}
+
+.dropdown-filter:hover, .dropdown-filter:focus {
+    border-color: #004aad;
+    box-shadow: 0 4px 8px rgba(0, 74, 173, 0.2);
+}
+
+body.dark-mode .dropdown-filter {
+    background-color: #1e293b;
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.2);
+}
