@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadMoreBtn = document.getElementById("loadMoreBtn"); 
     const filterPublicBtn = document.getElementById("filterPublic"); 
     
+    // NEW: Grab the dropdown menus
+    const universityFilter = document.getElementById("universityFilter");
+    const batchFilter = document.getElementById("batchFilter");
+    
     let alumniData = [];
     let currentDisplayData = []; 
     
@@ -21,8 +25,32 @@ document.addEventListener("DOMContentLoaded", () => {
             currentDisplayData = [...alumniData]; 
             displayAlumni(currentDisplayData); 
             updateDashboard(alumniData); 
+            populateDropdowns(alumniData); // NEW: Fill the dropdown menus
         })
         .catch(error => console.error("Error loading alumni data:", error));
+
+    // NEW FUNCTION: Automatically fill dropdowns with unique data
+    function populateDropdowns(data) {
+        if (!universityFilter || !batchFilter) return;
+
+        // Get unique universities and sort alphabetically
+        const universities = [...new Set(data.map(a => a.university || a.college).filter(Boolean))].sort();
+        universities.forEach(uni => {
+            const option = document.createElement("option");
+            option.value = uni;
+            option.textContent = uni;
+            universityFilter.appendChild(option);
+        });
+
+        // Get unique batches and sort newest to oldest
+        const batches = [...new Set(data.map(a => a.sscBatch).filter(Boolean))].sort((a, b) => b - a);
+        batches.forEach(batch => {
+            const option = document.createElement("option");
+            option.value = batch;
+            option.textContent = batch;
+            batchFilter.appendChild(option);
+        });
+    }
 
     function displayAlumni(data) {
         container.innerHTML = ""; 
@@ -38,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dataToShow.forEach(alumnus => {
             const card = document.createElement("div");
             
-            // NEW: If they are the developer, add the special glowing card class!
             if (alumnus.isDeveloper) {
                 card.className = "alumni-card developer-card";
             } else {
@@ -46,34 +73,22 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             const emailButton = (alumnus.emailUser && alumnus.emailDomain) ? 
-                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` 
-                : "";
+                `<button class="contact-btn" onclick="window.location.href='mailto:${alumnus.emailUser}@${alumnus.emailDomain}'">✉️ Email</button>` : "";
 
             const whatsappText = `Hello ${alumnus.name}, I am a current student. I found your profile on the Alumni Directory and would love to ask you a quick question!`;
             const whatsappButton = (alumnus.whatsappCode && alumnus.whatsappNum) ? 
-                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` 
-                : "";
+                `<button class="whatsapp-btn" onclick="window.open('https://wa.me/${alumnus.whatsappCode}${alumnus.whatsappNum}?text=${encodeURIComponent(whatsappText)}', '_blank')">💬 WhatsApp</button>` : "";
 
             const callButton = (alumnus.phoneCode && alumnus.phoneNum) ? 
-                `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` 
-                : "";
+                `<button class="contact-btn" style="background-color: #059669; color: white; border-color: #059669;" onclick="window.location.href='tel:${alumnus.phoneCode}${alumnus.phoneNum}'">📞 Call</button>` : "";
 
-            const mentoringBadge = alumnus.mentoring ? 
-                `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` 
-                : "";
-
-            const newArrivalBadge = alumnus.isNew ? 
-                `<div class="new-badge">✨ NEW</div>` 
-                : "";
-
+            const mentoringBadge = alumnus.mentoring ? `<div class="mentoring-badge"><span class="glow-dot"></span>Mentoring</div>` : "";
+            const newArrivalBadge = alumnus.isNew ? `<div class="new-badge">✨ NEW</div>` : "";
             const publicTag = alumnus.isPublic ? `<span class="public-badge">🏛️ Public</span>` : "";
-            
-            // NEW: The Developer Badge
             const developerBadge = alumnus.isDeveloper ? `<div class="developer-badge">👨‍💻 Lead Developer</div><br>` : "";
 
             const institutionLabel = alumnus.university ? "University" : "College";
             const institutionValue = alumnus.university || alumnus.college || "N/A";
-            
             const studyLabel = alumnus.department ? "Department" : "Group";
             const studyValue = alumnus.department || alumnus.group || "N/A";
 
@@ -108,17 +123,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    if(loadMoreBtn) {
-        loadMoreBtn.addEventListener("click", () => {
-            currentlyShowing += itemsPerPage; 
-            displayAlumni(currentDisplayData); 
+    // NEW FUNCTION: The Master Filter! Handles search bar AND dropdowns together.
+    function applyFilters() {
+        const searchString = searchInput.value.toLowerCase();
+        const selectedUni = universityFilter ? universityFilter.value : "";
+        const selectedBatch = batchFilter ? batchFilter.value.toString() : "";
+
+        let filteredData = isPublicFilterActive ? alumniData.filter(a => a.isPublic) : alumniData;
+
+        currentDisplayData = filteredData.filter(alumnus => {
+            const institution = (alumnus.university || alumnus.college || "");
+            const name = (alumnus.name || "").toLowerCase();
+            const batch = (alumnus.sscBatch || "").toString();
+
+            // Check if it matches search text
+            const matchesSearch = name.includes(searchString) || institution.toLowerCase().includes(searchString) || batch.includes(searchString);
+            
+            // Check if it matches dropdowns
+            const matchesUni = selectedUni === "" || institution === selectedUni;
+            const matchesBatch = selectedBatch === "" || batch === selectedBatch;
+
+            return matchesSearch && matchesUni && matchesBatch;
         });
+
+        currentlyShowing = itemsPerPage; 
+        displayAlumni(currentDisplayData); 
     }
+
+    // Event Listeners for Filters
+    searchInput.addEventListener("input", applyFilters);
+    if (universityFilter) universityFilter.addEventListener("change", applyFilters);
+    if (batchFilter) batchFilter.addEventListener("change", applyFilters);
 
     if(filterPublicBtn) {
         filterPublicBtn.addEventListener("click", () => {
             isPublicFilterActive = !isPublicFilterActive; 
-            
             if (isPublicFilterActive) {
                 filterPublicBtn.style.backgroundColor = "#004aad";
                 filterPublicBtn.style.color = "white";
@@ -126,29 +165,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 filterPublicBtn.style.backgroundColor = "";
                 filterPublicBtn.style.color = "";
             }
-
-            searchInput.dispatchEvent(new Event('input')); 
+            applyFilters(); 
         });
     }
 
-    searchInput.addEventListener("input", (e) => {
-        const searchString = e.target.value.toLowerCase();
-        
-        let baseData = isPublicFilterActive ? alumniData.filter(a => a.isPublic) : alumniData;
-
-        currentDisplayData = baseData.filter(alumnus => {
-            const institution = (alumnus.university || alumnus.college || "").toLowerCase();
-            const name = (alumnus.name || "").toLowerCase();
-            const batch = (alumnus.sscBatch || "").toString();
-
-            return name.includes(searchString) ||
-                   institution.includes(searchString) ||
-                   batch.includes(searchString);
+    if(loadMoreBtn) {
+        loadMoreBtn.addEventListener("click", () => {
+            currentlyShowing += itemsPerPage; 
+            displayAlumni(currentDisplayData); 
         });
-        
-        currentlyShowing = itemsPerPage; 
-        displayAlumni(currentDisplayData); 
-    });
+    }
 
     sortNameBtn.addEventListener("click", () => {
         currentDisplayData.sort((a, b) => a.name.localeCompare(b.name));
@@ -172,7 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     darkModeToggle.addEventListener("click", () => {
         body.classList.toggle("dark-mode");
-        
         if (body.classList.contains("dark-mode")) {
             darkModeToggle.textContent = "☀️";
             localStorage.setItem("theme", "dark");
@@ -183,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
     window.addEventListener("scroll", () => {
         if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
             scrollToTopBtn.style.display = "block";
@@ -193,15 +217,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     scrollToTopBtn.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     const desktopNotice = document.getElementById("desktop-notice");
     const closeNoticeBtn = document.getElementById("closeNoticeBtn");
-
     if (closeNoticeBtn) {
         closeNoticeBtn.addEventListener("click", () => {
             desktopNotice.style.display = "none";
