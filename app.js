@@ -224,13 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    const desktopNotice = document.getElementById("desktop-notice");
-    const closeNoticeBtn = document.getElementById("closeNoticeBtn");
-    if (closeNoticeBtn) {
-        closeNoticeBtn.addEventListener("click", () => {
-            desktopNotice.style.display = "none";
-        });
-    }
+    
 
     function updateDashboard(data) {
         const totalAlumni = data.length;
