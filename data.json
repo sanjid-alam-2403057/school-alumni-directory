@@ -9,6 +9,7 @@
    "emailUser": "abdulmalekshuvo", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
+      "location": "Gabtoli, Mirpur, Dhaka, Bangladesh",
     "whatsappNum": "1676396626"
       
   },
@@ -23,8 +24,9 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "+1",
     "whatsappNum": "6725526982",
-      "mentoring": true,
-      "isPublic": true
+   "mentoring": true,
+   "location": "Columbia, Canada",
+     "isPublic": true
   },
    {
     "name": "Sanzida Alam",
@@ -38,6 +40,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1725160194",
       "mentoring": true,
+       "location": "Chittagong, Bangladesh",
       "isPublic": true
   },
    {
@@ -52,6 +55,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1740565992",
       "mentoring": true,
+       "location": "Comilla, Bangladesh",
       "isPublic": true
   },
     {
@@ -66,6 +70,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1842233076",
        "mentoring": true,
+        "location": "Comilla, Bangladesh",
        "isPublic": true
   },
     {
@@ -79,6 +84,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1619088307",
+       "location": "Dhaka, Bangladesh",
        "mentoring": true
       
   },
@@ -93,6 +99,7 @@
     "emailDomain": "gmail.com",
     "phoneCode": "+880",
     "phoneNum": "1616564479",
+       "location": "Comilla, Bangladesh",
        "mentoring": true
       
   },
@@ -108,6 +115,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1751905910",
     "mentoring": true,
+       "location": "Chittagong, Bangladesh",
       "isPublic": true
     },
    {
@@ -121,6 +129,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1757790817",
+       "location": "Comilla, Bangladesh",
      "mentoring": true
     },
     {
@@ -134,6 +143,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1308739889",
+        "location": "Laksam, Comilla, Bangladesh",
      "mentoring": true
     },
   {
@@ -149,6 +159,7 @@
     "whatsappNum": "1863232179",
      "mentoring": true,
      "isPublic": true,
+     "location": "Rajshahi, Bangladesh",
      "isDeveloper": true
    
   },
@@ -163,6 +174,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1763899713",
+      "location": "Dhaka, Bangladesh",
       "mentoring": true
   },
     {
@@ -176,6 +188,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "130144357",
+       "location": "Dhaka, Bangladesh",
       "mentoring": true
        
   },
@@ -191,6 +204,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1347188043",
       "mentoring": true,
+      "location": "Comilla, Bangladesh",
       "isPublic": true
   },
    {
@@ -205,6 +219,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1742216801",
       "mentoring": true,
+      "location": "Dhaka, Bangladesh",
       "isPublic": true
   },
     
@@ -218,7 +233,8 @@
       "emailUser": "absmilon1446", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1516521446",  
+    "whatsappNum": "1516521446",
+       "location": "Dhaka, Bangladesh",
       "mentoring": true
       },
     {
@@ -232,6 +248,7 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1799238312",
+        "location": "Laksam, Comilla, Bangladesh",
       "mentoring": true
   }
 ]
