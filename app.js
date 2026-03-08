@@ -116,6 +116,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const institutionValue = alumnus.university || alumnus.college || "N/A";
 
+            // --- SANITIZE STRINGS FOR BUTTONS ---
+            const safeName = alumnus.name ? alumnus.name.replace(/'/g, "\\'") : "Alumnus";
+            const safeUni = institutionValue ? institutionValue.replace(/'/g, "\\'") : "N/A";
+            const safeDept = studyValue ? studyValue.replace(/'/g, "\\'") : "N/A";
+            const safeBatch = alumnus.sscBatch || "N/A";
+            const safeAdmission = alumnus.admissionYear || "N/A";
+            const safePhoto = alumnus.photo || 'images/default-avatar.png';
+
+            // --- ACTION BUTTONS (Share & Digital ID) ---
+            const actionButtons = `
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="share-btn" style="flex: 1;" onclick="shareProfile(this, '${safeName}', '${safeUni}')">🔗 Share</button>
+                    <button class="share-btn" style="flex: 1; background-color: #10b981; color: white; border-color: #10b981;" onclick="generateIDCard('${safeName}', '${safePhoto}', '${safeUni}', '${safeDept}', '${safeBatch}', '${safeAdmission}', this)">🪪 Digital ID</button>
+                </div>
+            `;
+
+            // --- FINAL HTML CONSTRUCTION ---
             card.innerHTML = `
                 ${newArrivalBadge}
                 ${mentoringBadge}
@@ -132,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${whatsappButton}
                     ${callButton}
                 </div>
-                <button class="share-btn" onclick="shareProfile(this, '${alumnus.name}', '${institutionValue}')">🔗 Share Profile</button>
+                ${actionButtons} 
             `;
 
             container.appendChild(card);
@@ -498,5 +515,79 @@ window.plotAlumniOnMap = async function(data) {
         if (mapLoadingOverlay) {
             mapLoadingOverlay.style.display = 'none';
         }
+    }
+};
+
+// ==========================================
+// 🪪 DIGITAL ID CARD GENERATOR LOGIC
+// ==========================================
+window.generateIDCard = function(name, photo, uni, dept, batch, admitted, buttonElement) {
+    // 1. Give the user visual feedback that it's working
+    const originalText = buttonElement.innerHTML;
+    buttonElement.innerHTML = "⏳ Generating...";
+    buttonElement.disabled = true;
+    buttonElement.style.opacity = "0.7";
+
+    // 2. Populate the hidden HTML template with this specific user's data
+    document.getElementById('id-card-name').textContent = name;
+    document.getElementById('id-card-uni').textContent = uni;
+    document.getElementById('id-card-dept').textContent = dept;
+    document.getElementById('id-card-batch').textContent = batch;
+    document.getElementById('id-card-admitted').textContent = admitted;
+    
+    const photoElement = document.getElementById('id-card-photo');
+    photoElement.src = photo;
+
+    // 3. We must wait for the image to fully load in the hidden div before taking the screenshot!
+    photoElement.onload = function() {
+        takeScreenshotAndDownload();
+    };
+    
+    // Fallback if image fails to load (e.g., broken link)
+    photoElement.onerror = function() {
+        photoElement.src = 'images/default-avatar.png';
+        takeScreenshotAndDownload();
+    };
+
+    // If the browser already cached the image, onload might fire instantly
+    if (photoElement.complete) {
+        takeScreenshotAndDownload();
+    }
+
+    // 4. The actual screenshot logic
+    function takeScreenshotAndDownload() {
+        const cardTemplate = document.getElementById('id-card-template');
+
+        html2canvas(cardTemplate, {
+            scale: 2, // Double resolution for a crisp, high-quality image
+            useCORS: true, // Crucial: Allows external photos to be drawn on the canvas safely
+            backgroundColor: null 
+        }).then(canvas => {
+            // Create a fake link to trigger the download
+            const link = document.createElement('a');
+            link.download = `${name.replace(/\s+/g, '_')}_Alumni_ID.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            // Restore button to a success state!
+            buttonElement.innerHTML = "✅ Downloaded!";
+            buttonElement.style.backgroundColor = "#059669"; // Slightly darker green
+            
+            setTimeout(() => {
+                buttonElement.innerHTML = originalText;
+                buttonElement.style.backgroundColor = "#10b981"; // Back to original green
+                buttonElement.style.opacity = "1";
+                buttonElement.disabled = false;
+            }, 2500);
+        }).catch(err => {
+            console.error("Error generating ID card:", err);
+            buttonElement.innerHTML = "❌ Error";
+            
+            setTimeout(() => {
+                buttonElement.innerHTML = originalText;
+                buttonElement.style.opacity = "1";
+                buttonElement.disabled = false;
+            }, 2000);
+        });
     }
 };
