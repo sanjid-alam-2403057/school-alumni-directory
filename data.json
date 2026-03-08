@@ -107,7 +107,8 @@
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
     "whatsappNum": "1751905910",
-     "mentoring": true
+    "mentoring": true,
+      "isPublic": true
     },
    {
     "name": "Billal Hossen",
