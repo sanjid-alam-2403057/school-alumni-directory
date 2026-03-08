@@ -343,3 +343,40 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.error('Service Worker Registration Failed!', err));
     });
 }
+// ==========================================
+// 🗺️ INTERACTIVE ALUMNI MAP LOGIC
+// ==========================================
+
+// 1. Initialize the map and set the view to Bangladesh (Latitude, Longitude, Zoom Level)
+const map = L.map('alumniMap').setView([23.6850, 90.3563], 7);
+
+// 2. Load the free OpenStreetMap tiles (the actual visual map)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// 3. Dummy Data Array (We will connect this to your Google Sheet later!)
+const mapData = [
+    { name: "Sanjid Alam", batch: "SSC 2021", uni: "RUET", location: "Rajshahi", coords: [24.3745, 88.6042] },
+    { name: "Rahim Uddin", batch: "SSC 2019", uni: "BUET", location: "Dhaka", coords: [23.7270, 90.3920] },
+    { name: "Ayesha Siddiqua", batch: "SSC 2020", uni: "CUET", location: "Chittagong", coords: [22.4604, 91.9715] },
+    { name: "Tanvir Hasan", batch: "SSC 2018", uni: "SUST", location: "Sylhet", coords: [24.9193, 91.8316] }
+];
+
+// 4. Loop through the data and place pins on the map
+mapData.forEach(alumni => {
+    // Drop the pin
+    const marker = L.marker(alumni.coords).addTo(map);
+    
+    // Create the pop-up bubble for when someone clicks the pin
+    marker.bindPopup(`
+        <div style="font-family: 'Poppins', sans-serif; text-align: center;">
+            <strong style="color: #004aad; font-size: 1.1rem;">${alumni.name}</strong><br>
+            <span style="font-size: 0.9rem; color: #555;">${alumni.uni}</span><br>
+            <span style="font-size: 0.8rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-top: 5px;">
+                ${alumni.batch}
+            </span>
+        </div>
+    `);
+});
