@@ -687,3 +687,106 @@ body.dark-mode .dropdown-filter {
     color: #ffffff;
     border-color: rgba(255,255,255,0.2);
 }
+/* --- BKASH/NAGAD SUPPORT BUTTON & MODAL --- */
+.support-dev-container {
+    margin-top: 15px;
+}
+
+.support-btn {
+    background-color: #10b981; /* A nice welcoming green */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.support-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* The Pop-up Background */
+.payment-modal {
+    display: none; 
+    position: fixed; 
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    align-items: center; 
+    justify-content: center;
+}
+
+/* The Pop-up Box */
+.payment-modal-content {
+    background-color: white; 
+    padding: 30px; 
+    border-radius: 20px;
+    width: 90%; 
+    max-width: 400px; 
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+body.dark-mode .payment-modal-content { 
+    background-color: #1e293b; 
+    color: #f8fafc; 
+}
+
+.close-payment-btn {
+    position: absolute; right: 20px; top: 15px;
+    font-size: 28px; cursor: pointer; color: #94a3b8;
+    transition: color 0.2s;
+}
+
+.close-payment-btn:hover { color: #ef4444; }
+
+.payment-card {
+    margin: 15px 0; padding: 15px; border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+body.dark-mode .payment-card {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+.bkash-card { border-top: 4px solid #e2136e; } /* bKash Pink */
+.nagad-card { border-top: 4px solid #f7931e; } /* Nagad Orange */
+
+.phone-number { 
+    font-size: 1.4rem; 
+    font-weight: bold; 
+    margin: 10px 0; 
+    letter-spacing: 1px; 
+    color: #0f172a;
+}
+
+body.dark-mode .phone-number { color: #f8fafc; }
+
+.copy-number-btn {
+    background-color: transparent;
+    border: 1px solid #cbd5e1;
+    padding: 6px 15px; 
+    border-radius: 15px; 
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    color: #475569;
+}
+
+body.dark-mode .copy-number-btn { color: #cbd5e1; border-color: #475569;}
+.copy-number-btn:hover { background-color: #e2e8f0; color: #0f172a; }
+body.dark-mode .copy-number-btn:hover { background-color: #334155; color: white;}
