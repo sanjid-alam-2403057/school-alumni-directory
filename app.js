@@ -18,17 +18,27 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
-    fetch("data.json")
+   fetch("data.json")
         .then(response => response.json())
         .then(data => {
-            document.getElementById("loadingSpinner").style.display = "none";
+            // Hides the spinner when data successfully loads
+            const spinner = document.getElementById("loadingSpinner");
+            if (spinner) spinner.style.display = "none"; 
+            
             alumniData = data;
             currentDisplayData = [...alumniData]; 
             displayAlumni(currentDisplayData); 
             updateDashboard(alumniData); 
-            populateDropdowns(alumniData); // NEW: Fill the dropdown menus
+            populateDropdowns(alumniData); 
         })
-        .catch(error => console.error("Error loading alumni data:", error));
+        .catch(error => {
+            console.error("Error loading alumni data:", error);
+            // Hides the spinner even if there is an error!
+            const spinner = document.getElementById("loadingSpinner");
+            if (spinner) spinner.style.display = "none";
+            
+            container.innerHTML = "<p style='text-align:center; color:red; width:100%;'>Error loading data. Please try again later.</p>";
+        });
 
    // NEW FUNCTION: Automatically fill dropdowns with unique data
     function populateDropdowns(data) {
