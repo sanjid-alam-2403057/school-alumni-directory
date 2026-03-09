@@ -88,6 +88,18 @@
        "mentoring": true
       
   },
+    {
+    "name": "Rohima Akter Lima",
+    "college": "Institute of Health Technology",
+    "department": "Physiotherapy",
+    "admissionYear": 2023,
+    "sscBatch": 2020,
+    "photo": "images/tarin.png",
+   "emailUser": "rahima.lima121", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1979829941"
+   },
    {
     "name": "Md.Rashedul Islam",
     "university": "National University, Comilla Victoria Collage",
