@@ -1318,3 +1318,27 @@ body.dark-mode .btn-global-vault {
     display: block;
     text-align: right;
 }
+/* --- Memory Vault Submit Button --- */
+.vault-submit-container {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: -5px;
+}
+
+.btn-submit-memory {
+    background-color: #28a745; /* A nice "success" green color */
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-submit-memory:hover {
+    background-color: #218838;
+    color: white;
+    transform: translateY(-2px); /* Slight lift effect when hovering */
+}
