@@ -559,6 +559,7 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
         });
     }
 };
+
 /* =========================================
    MEMORY VAULT MODAL LOGIC (Live Data)
    ========================================= */
@@ -582,15 +583,31 @@ if (openGlobalVaultBtn) {
             fetch(MEMORY_API_URL)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Data received from Google Sheets:", data); // Check the console log to see your data structure
+                    
                     vaultGallery.innerHTML = ""; // Clear the loading text
                     
-                    if (!data || data.length === 0) {
+                    // Safely extract the array
+                    let memoryArray = [];
+                    if (Array.isArray(data)) {
+                        memoryArray = data;
+                    } else if (data && Array.isArray(data.data)) { 
+                        memoryArray = data.data; 
+                    } else if (data && Array.isArray(data.items)) {
+                        memoryArray = data.items;
+                    } else {
+                        console.error("Expected an array but got something else:", data);
+                        vaultGallery.innerHTML = "<p style='text-align: center; color: red;'>⚠️ Data format error. Check console for details.</p>";
+                        return;
+                    }
+
+                    if (memoryArray.length === 0) {
                         vaultGallery.innerHTML = "<p style='text-align: center;'>No memories yet. Be the first to add one! 📸</p>";
                         return;
                     }
                     
                     // Reverse the data so the newest photos show up first
-                    data.reverse().forEach(memory => {
+                    memoryArray.reverse().forEach(memory => {
                         const name = memory["Name"] || "Anonymous";
                         const batch = memory["SSC Batch"] ? ` (Batch ${memory["SSC Batch"]})` : "";
                         const text = memory["The Memory / Story"] || "";
