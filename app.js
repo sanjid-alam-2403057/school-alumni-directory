@@ -18,40 +18,56 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
- // Add a timestamp to the URL so mobile phones NEVER cache the data.json file!
-const cacheBuster = new Date().getTime();
+    // --- BULLETPROOF FETCH WITH CACHE-BUSTER ---
+    // Add a timestamp to the URL so mobile phones NEVER cache the data.json file!
+    const cacheBuster = new Date().getTime();
 
-fetch(`data.json?v=${cacheBuster}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Could not find data.json");
-        }
-        return response.json();
-    })
-    .then(data => {
-        // ... YOUR EXISTING CODE THAT USES THE DATA GOES HERE ...
-        // (Usually it's something like setting a global array and calling your render function)
-        
-    })
-    .catch(error => {
-        // THE SAFETY NET: If data.json has a typo, catch it here!
-        console.error("🚨 CRITICAL ERROR in data.json:", error);
-        
-        // Hide the loading spinner if you have one
-        const spinner = document.getElementById('loadingSpinner');
-        if (spinner) spinner.style.display = 'none';
+    fetch(`data.json?v=${cacheBuster}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Could not find data.json");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // THIS IS WHAT WAS MISSING! 
+            // We need to save the data, hide the spinner, and draw the cards.
+            alumniData = data;
+            currentDisplayData = [...alumniData];
+            
+            const spinner = document.getElementById('loadingSpinner');
+            if(spinner) spinner.style.display = 'none';
+            
+            populateDropdowns(alumniData);
+            displayAlumni(currentDisplayData);
+            updateDashboard(alumniData);
+            
+            // Give the map a moment to load before plotting points
+            setTimeout(() => {
+                if(typeof window.plotAlumniOnMap === 'function') {
+                    window.plotAlumniOnMap(currentDisplayData);
+                }
+            }, 500);
+        })
+        .catch(error => {
+            // THE SAFETY NET: If data.json has a typo, catch it here!
+            console.error("🚨 CRITICAL ERROR in data.json:", error);
+            
+            // Hide the loading spinner if you have one
+            const spinner = document.getElementById('loadingSpinner');
+            if (spinner) spinner.style.display = 'none';
 
-        // Show a friendly message inside the main container instead of a blank screen
-        const container = document.getElementById('alumni-container');
-        if (container) {
-            container.innerHTML = `
-                <div style="text-align: center; padding: 50px; width: 100%;">
-                    <h2 style="color: #e63946;">Oops! Database Updating 🛠️</h2>
-                    <p>We are currently doing some quick maintenance on the alumni database.<br>Please check back in a few minutes!</p>
-                </div>
-            `;
-        }
-    });
+            // Show a friendly message inside the main container instead of a blank screen
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px; width: 100%;">
+                        <h2 style="color: #e63946;">Oops! Database Updating 🛠️</h2>
+                        <p>We are currently doing some quick maintenance on the alumni database.<br>Please check back in a few minutes!</p>
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 20px;">Developer note: Check data.json for missing commas or quotes.</p>
+                    </div>
+                `;
+            }
+        });
 
    // Automatically fill dropdowns with unique data
     function populateDropdowns(data) {
@@ -194,7 +210,10 @@ fetch(`data.json?v=${cacheBuster}`)
 
         currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData); 
-        plotAlumniOnMap(currentDisplayData); 
+        
+        if(typeof window.plotAlumniOnMap === 'function') {
+            window.plotAlumniOnMap(currentDisplayData); 
+        }
     }
 
     // Event Listeners for Filters
