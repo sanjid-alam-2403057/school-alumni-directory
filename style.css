@@ -1272,3 +1272,47 @@ body.dark-mode .btn-global-vault {
         }
     }
 }
+/* =========================================
+   MEMORY VAULT GALLERY STYLES
+   ========================================= */
+.vault-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 60vh; /* Keeps the modal from getting too tall */
+    overflow-y: auto; /* Adds a scrollbar if there are many memories */
+    padding-right: 10px;
+}
+
+.memory-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.memory-img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover; /* Crops the image nicely without stretching */
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #e2e8f0; /* Placeholder color while image loads */
+}
+
+.memory-text {
+    font-style: italic;
+    color: #334155;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.memory-author {
+    font-weight: bold;
+    color: #f59e0b;
+    font-size: 0.9rem;
+    display: block;
+    text-align: right;
+}
