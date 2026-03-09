@@ -559,38 +559,81 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
         });
     }
 };
+/* =========================================
+   MEMORY VAULT MODAL LOGIC (Live Data)
+   ========================================= */
+const memoryVaultModal = document.getElementById('memoryVaultModal');
+const openGlobalVaultBtn = document.getElementById('openGlobalVaultBtn');
+const closeVaultModal = document.getElementById('closeVaultModal');
+const vaultGallery = document.getElementById('vaultGallery');
 
-// =========================================
-// 📸 GLOBAL MEMORY VAULT MODAL LOGIC
-// =========================================
+// Your Google Apps Script Web App URL
+const MEMORY_API_URL = "https://script.google.com/macros/s/AKfycbyLueeeEY651qAMlODFllLB5PYG541uT89fhx0nVAJ62q9ReT5swAY5Md-BfgjnHLSv/exec";
+let memoriesLoaded = false; // Prevents loading twice if they close and reopen the modal
 
-document.addEventListener("DOMContentLoaded", () => {
-    const vaultModal = document.getElementById('memoryVaultModal');
-    const closeVaultBtn = document.getElementById('closeVaultModal');
-    const openGlobalVaultBtn = document.getElementById('openGlobalVaultBtn');
+if (openGlobalVaultBtn) {
+    openGlobalVaultBtn.addEventListener('click', () => {
+        memoryVaultModal.style.display = 'flex'; 
+        
+        // If we haven't loaded the memories yet, fetch them from Google Sheets!
+        if (!memoriesLoaded) {
+            vaultGallery.innerHTML = "<p style='text-align: center; padding: 20px;'>⏳ Loading memories...</p>";
+            
+            fetch(MEMORY_API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    vaultGallery.innerHTML = ""; // Clear the loading text
+                    
+                    if (!data || data.length === 0) {
+                        vaultGallery.innerHTML = "<p style='text-align: center;'>No memories yet. Be the first to add one! 📸</p>";
+                        return;
+                    }
+                    
+                    // Reverse the data so the newest photos show up first
+                    data.reverse().forEach(memory => {
+                        const name = memory["Name"] || "Anonymous";
+                        const batch = memory["SSC Batch"] ? ` (Batch ${memory["SSC Batch"]})` : "";
+                        const text = memory["The Memory / Story"] || "";
+                        const photoUrl = memory["Upload your photo"] || "";
 
-    // 1. Open Modal from the new big global button
-    if (openGlobalVaultBtn && vaultModal) {
-        openGlobalVaultBtn.addEventListener('click', () => {
-            const subtitle = document.getElementById('vaultSubtitle');
-            if (subtitle) {
-                subtitle.innerText = "Nostalgic moments from our alumni community!";
-            }
-            vaultModal.style.display = 'flex';
-        });
-    }
+                        // Skip empty rows
+                        if (!text && !photoUrl) return;
 
-    // 2. Close the modal when clicking the 'X'
-    if (closeVaultBtn) {
-        closeVaultBtn.addEventListener('click', () => {
-            vaultModal.style.display = 'none';
-        });
-    }
-
-    // 3. Close the modal when clicking outside the box
-    window.addEventListener('click', (e) => {
-        if (e.target === vaultModal) {
-            vaultModal.style.display = 'none';
+                        // Create the HTML for the card
+                        const card = document.createElement("div");
+                        card.className = "memory-card";
+                        
+                        let htmlContent = "";
+                        if (photoUrl) {
+                            htmlContent += `<img src="${photoUrl}" alt="Memory photo" class="memory-img" loading="lazy">`;
+                        }
+                        if (text) {
+                            htmlContent += `<p class="memory-text">"${text}"</p>`;
+                        }
+                        htmlContent += `<span class="memory-author">- ${name}${batch}</span>`;
+                        
+                        card.innerHTML = htmlContent;
+                        vaultGallery.appendChild(card);
+                    });
+                    
+                    memoriesLoaded = true;
+                })
+                .catch(error => {
+                    console.error("Error fetching memories:", error);
+                    vaultGallery.innerHTML = "<p style='text-align: center; color: red;'>⚠️ Failed to load memories. Please try again later.</p>";
+                });
         }
     });
+}
+
+if (closeVaultModal) {
+    closeVaultModal.addEventListener('click', () => {
+        memoryVaultModal.style.display = 'none';
+    });
+}
+
+window.addEventListener('click', (event) => {
+    if (event.target === memoryVaultModal) {
+        memoryVaultModal.style.display = 'none';
+    }
 });
