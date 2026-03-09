@@ -104,6 +104,21 @@
       
   },
    {
+    "name": "Rakibul Islam",
+    "university": "Bangladesh University Of Engineering Technology (BUET)",
+    "department": "Chemical Engineering (ChE)",
+    "admissionYear": 2024,
+    "sscBatch": 2021,
+    "photo": "images/rakib.jpg",
+   "emailUser": "rakibulislam2742000", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1798637506",
+    "mentoring": true,
+       "location": "Palashi, Dhaka, Bangladesh",
+      "isPublic": true
+    },
+   {
     "name": "Rahima Akter Mishu",
     "university": "University of Chittagong",
     "department": "Statistics",
@@ -148,8 +163,8 @@
     },
   {
     "name": "Sanjid Alam",
-    "university": "Rajshahi University of Engineering & Technology",
-    "department": "Computer Science and Engineering",
+    "university": "Rajshahi University of Engineering & Technology (RUET)",
+    "department": "Computer Science and Engineering (CSE) ",
     "admissionYear": 2025,
     "sscBatch": 2022,
     "photo": "images/sanjid.jpg",
@@ -166,7 +181,7 @@
    {
     "name": "Shihab Uddin",
     "university": "Daffodil International University",
-    "department": "Computer Science and Engineering",
+    "department": "Computer Science and Engineering (CSE)",
     "admissionYear": 2025,
     "sscBatch": 2022,
     "photo": "images/shihab.jpg",
