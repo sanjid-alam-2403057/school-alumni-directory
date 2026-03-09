@@ -40,7 +40,7 @@
     "whatsappCode": "880",
     "whatsappNum": "1725160194",
       "mentoring": true,
-       "location": "Chittagong, Bangladesh",
+      "location": "Chittagong, Bangladesh",
       "isPublic": true
   },
    {
@@ -98,7 +98,8 @@
    "emailUser": "rahima.lima121", 
     "emailDomain": "gmail.com",
     "whatsappCode": "880",
-    "whatsappNum": "1979829941"
+    "whatsappNum": "1979829941",
+      "location": "Faujdarhat, Chittagong, Bangladesh",
    },
    {
     "name": "Md.Rashedul Islam",
