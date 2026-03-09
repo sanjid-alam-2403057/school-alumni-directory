@@ -508,10 +508,10 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
     
     const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${uni}\nNOTE:Dept: ${dept} | Batch: ${batch}\nEND:VCARD`;
     
-  new QRCode(qrContainer, {
+ new QRCode(qrContainer, {
         text: vCardData,
-        width: 45,   // Changed from 70 to make it smaller
-        height: 45,  // Changed from 70 to make it smaller
+        width: 45,  // Make sure this is 45
+        height: 45, // Make sure this is 45
         colorDark : "#004aad", 
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.L
