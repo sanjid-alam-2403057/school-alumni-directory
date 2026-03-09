@@ -18,31 +18,40 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let isPublicFilterActive = false; 
 
-   // FETCHING FROM YOUR LOCAL JSON FILE
-   fetch("data.json")
-        .then(response => response.json())
-        .then(data => {
-            const spinner = document.getElementById("loadingSpinner");
-            if (spinner) spinner.style.display = "none"; 
-            
-            alumniData = data;
-            currentDisplayData = [...alumniData]; 
-            displayAlumni(currentDisplayData); 
-            updateDashboard(alumniData); 
-            populateDropdowns(alumniData); 
-            
-            // Trigger the smart map!
-            plotAlumniOnMap(alumniData); 
-        })
-        .catch(error => {
-            console.error("Error loading alumni data:", error);
-            const spinner = document.getElementById("loadingSpinner");
-            if (spinner) spinner.style.display = "none";
-            
-            if (container) {
-                container.innerHTML = "<p class='error-msg'>Error loading data. Please try again later.</p>";
-            }
-        });
+ // Add a timestamp to the URL so mobile phones NEVER cache the data.json file!
+const cacheBuster = new Date().getTime();
+
+fetch(`data.json?v=${cacheBuster}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Could not find data.json");
+        }
+        return response.json();
+    })
+    .then(data => {
+        // ... YOUR EXISTING CODE THAT USES THE DATA GOES HERE ...
+        // (Usually it's something like setting a global array and calling your render function)
+        
+    })
+    .catch(error => {
+        // THE SAFETY NET: If data.json has a typo, catch it here!
+        console.error("🚨 CRITICAL ERROR in data.json:", error);
+        
+        // Hide the loading spinner if you have one
+        const spinner = document.getElementById('loadingSpinner');
+        if (spinner) spinner.style.display = 'none';
+
+        // Show a friendly message inside the main container instead of a blank screen
+        const container = document.getElementById('alumni-container');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 50px; width: 100%;">
+                    <h2 style="color: #e63946;">Oops! Database Updating 🛠️</h2>
+                    <p>We are currently doing some quick maintenance on the alumni database.<br>Please check back in a few minutes!</p>
+                </div>
+            `;
+        }
+    });
 
    // Automatically fill dropdowns with unique data
     function populateDropdowns(data) {
