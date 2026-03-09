@@ -1293,13 +1293,15 @@ body.dark-mode .btn-global-vault {
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
+/* --- Find this in your style.css --- */
 .memory-img {
     width: 100%;
     max-height: 250px;
-    object-fit: cover; /* Crops the image nicely without stretching */
+    /* object-fit: cover; */ /* ❌ CHANGE THIS LINE... */
+    object-fit: contain;      /* ✅ TO THIS LINE! */
     border-radius: 8px;
     margin-bottom: 12px;
-    background-color: #e2e8f0; /* Placeholder color while image loads */
+    background-color: #e2e8f0;
 }
 
 .memory-text {
