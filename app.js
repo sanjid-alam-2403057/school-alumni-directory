@@ -123,11 +123,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const safeAdmission = alumnus.admissionYear || "N/A";
             const safePhoto = alumnus.photo || 'images/default-avatar.png';
 
-            // --- ACTION BUTTONS (Share & Digital ID) ---
+            // --- ACTION BUTTONS (Share, Digital ID & Memory Vault!) ---
             const actionButtons = `
                 <div class="card-action-buttons">
                     <button class="btn-share" onclick="shareProfile(this, '${safeName}', '${safeUni}')">🔗 Share</button>
                     <button class="btn-digital-id" onclick="generateIDCard('${safeName}', '${safePhoto}', '${safeUni}', '${safeDept}', '${safeBatch}', '${safeAdmission}', this)">🪪 Digital ID</button>
+                    <button class="btn-vault" onclick="openMemoryVault('${safeName}', '${safeBatch}')">📸 Vault</button>
                 </div>
             `;
 
@@ -484,9 +485,6 @@ window.plotAlumniOnMap = async function(data) {
 };
 
 // ==========================================
-// 🪪 DIGITAL ID CARD GENERATOR LOGIC
-// ==========================================
-// ==========================================
 // 🪪 DIGITAL ID CARD GENERATOR LOGIC (WITH QR CODE)
 // ==========================================
 window.generateIDCard = function(name, photo, uni, dept, batch, admitted, buttonElement) {
@@ -569,4 +567,47 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
             }, 2000);
         });
     }
+};
+
+// =========================================
+// 📸 MEMORY VAULT MODAL LOGIC
+// =========================================
+
+// Event listener for opening/closing the vault modal
+document.addEventListener("DOMContentLoaded", () => {
+    const vaultModal = document.getElementById('memoryVaultModal');
+    const closeVaultBtn = document.getElementById('closeVaultModal');
+
+    // 1. Close the modal when clicking the 'X'
+    if (closeVaultBtn) {
+        closeVaultBtn.addEventListener('click', () => {
+            vaultModal.style.display = 'none';
+        });
+    }
+
+    // 2. Close the modal when clicking outside the box (on the dark overlay)
+    window.addEventListener('click', (e) => {
+        if (e.target === vaultModal) {
+            vaultModal.style.display = 'none';
+        }
+    });
+});
+
+// 3. The function to actually open the vault and set the title
+window.openMemoryVault = function(name, batch) {
+    const vaultModal = document.getElementById('memoryVaultModal');
+    const subtitle = document.getElementById('vaultSubtitle');
+    
+    if (subtitle) {
+        // Personalize the title based on who they clicked
+        subtitle.innerText = `Throwback moments from ${name} (Batch ${batch})`;
+    }
+    
+    // Display the modal using flexbox to keep it centered
+    if(vaultModal) {
+        vaultModal.style.display = 'flex';
+    }
+    
+    // Note: Later, we will add the code right here to actually fetch 
+    // the specific photos/stories from your JSON/Google Sheets!
 };
