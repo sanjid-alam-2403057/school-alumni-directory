@@ -1189,3 +1189,86 @@ body.dark-mode .leaflet-popup-content span {
 body.dark-mode .btn-global-vault {
     box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
 }
+/* =========================================
+   HEADER ACTION BUTTONS (Anti-Overlap Fix)
+   ========================================= */
+.top-right-actions {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between buttons */
+    z-index: 1000;
+}
+
+/* Override old absolute positioning so they sit side-by-side */
+.top-right-actions .dark-mode-btn,
+.top-right-actions .join-btn,
+.top-right-actions .memory-btn {
+    position: relative; 
+    top: auto;
+    right: auto;
+    margin: 0;
+}
+
+/* Style for the new Gallery button */
+.memory-btn {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.memory-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 650px) {
+    .top-right-actions {
+        top: 10px;
+        right: 10px;
+        gap: 6px; /* Tighter gap on phones */
+    }
+
+    /* Shrink the buttons slightly so they fit Android screens perfectly */
+    .top-right-actions .join-btn,
+    .top-right-actions .memory-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .top-right-actions .dark-mode-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+    
+    /* Optional: If it's STILL too cramped on very small phones, hide the text and just show icons */
+    @media (max-width: 450px) {
+        .top-right-actions .btn-text {
+            display: none; 
+        }
+        .top-right-actions .join-btn,
+        .top-right-actions .memory-btn {
+            border-radius: 50%;
+            padding: 10px;
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+        }
+        .top-right-actions .join-icon {
+            margin-right: 0;
+        }
+    }
+}
