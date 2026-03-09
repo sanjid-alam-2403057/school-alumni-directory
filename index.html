@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     
     <link rel="stylesheet" href="style.css?v=17">
     
@@ -37,6 +37,10 @@
         <p>Connecting past students with the future.</p>
         
         <button id="darkModeToggle" class="dark-mode-btn" title="Toggle Dark Mode">🌙</button>
+        
+        <button id="openGlobalVaultBtn" class="join-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; cursor: pointer; color: white; margin: 0 10px;">
+            📸 Memory Gallery
+        </button>
         
         <a href="https://forms.gle/KCkgUvTfByeTB7856" target="_blank" class="join-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="join-icon">
@@ -83,10 +87,12 @@
     </header>
     
     <div id="loadingSpinner" class="spinner"></div>
+    
     <div class="map-container">
         <h2>📍 Where Are Our Alumni Now?</h2>
         <div id="alumniMap"></div>
     </div>
+
     <main id="alumni-container">
         <div class="alumni-card skeleton-card">
             <div class="skeleton-img"></div>
@@ -151,7 +157,8 @@
         </div>
     </div>
 
-    <div id="memoryVaultModal" class="payment-modal"> <div class="payment-modal-content vault-modal-content">
+    <div id="memoryVaultModal" class="payment-modal"> 
+        <div class="payment-modal-content vault-modal-content">
             <span id="closeVaultModal" class="close-payment-btn">&times;</span>
             <h2>📸 Memory Vault</h2>
             <p style="color: #64748b; margin-bottom: 20px;" id="vaultSubtitle">Throwback moments from the batch!</p>
@@ -165,12 +172,9 @@
         </div>
     </div>
 
-    
     <script src="app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <div id="id-card-template" style="position: absolute; left: -9999px; top: -9999px; width: 320px; height: 500px; background: linear-gradient(135deg, #0a2540, #173d6b); color: white; border-radius: 16px; font-family: 'Poppins', sans-serif; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; z-index: -1;">
         
@@ -216,6 +220,5 @@
              ✔️ Official Verified Member
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </body>
 </html>
