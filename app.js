@@ -123,12 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const safeAdmission = alumnus.admissionYear || "N/A";
             const safePhoto = alumnus.photo || 'images/default-avatar.png';
 
-            // --- ACTION BUTTONS (Share, Digital ID & Memory Vault!) ---
+            // --- ACTION BUTTONS (Cleaned up! Removed vault from here) ---
             const actionButtons = `
                 <div class="card-action-buttons">
                     <button class="btn-share" onclick="shareProfile(this, '${safeName}', '${safeUni}')">🔗 Share</button>
                     <button class="btn-digital-id" onclick="generateIDCard('${safeName}', '${safePhoto}', '${safeUni}', '${safeDept}', '${safeBatch}', '${safeAdmission}', this)">🪪 Digital ID</button>
-                    <button class="btn-vault" onclick="openMemoryVault('${safeName}', '${safeBatch}')">📸 Vault</button>
                 </div>
             `;
 
@@ -186,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         currentlyShowing = itemsPerPage; 
         displayAlumni(currentDisplayData); 
-        plotAlumniOnMap(currentDisplayData); // Update Map with filtered results
+        plotAlumniOnMap(currentDisplayData); 
     }
 
     // Event Listeners for Filters
@@ -342,7 +341,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // ==========================================
-// 🗺️ SMART AUTOMATIC MAP LOGIC (Clustered & Locked to BD)
+// 🗺️ SMART AUTOMATIC MAP LOGIC
 // ==========================================
 
 const bangladeshBounds = [
@@ -434,13 +433,11 @@ window.plotAlumniOnMap = async function(data) {
 
             if (!coords) coords = geoCache["DEFAULT"];
 
-            // Determine theme colors dynamically
             const pinBorderColor = alumnus.isDeveloper ? '#FFD700' : '#004aad'; 
             const pinNeedleColor = alumnus.isDeveloper ? '#FFD700' : '#004aad';
             const popupWrapperClass = alumnus.isDeveloper ? 'map-popup-container dev-popup' : 'map-popup-container';
             const popupImageBorder = alumnus.isDeveloper ? '#FFD700' : '#004aad';
 
-            // HTML for custom map pin
             const customIcon = L.divIcon({
                 className: 'custom-profile-pin',
                 html: `
@@ -456,7 +453,6 @@ window.plotAlumniOnMap = async function(data) {
 
             const marker = L.marker(coords, { icon: customIcon });
             
-            // HTML for the map popup
             const popupContent = `
                 <div class="${popupWrapperClass}">
                     <img src="${alumnus.photo || 'images/default-avatar.png'}" class="map-popup-img" style="border-color: ${popupImageBorder};" onerror="this.src='images/default-avatar.png'">
@@ -485,7 +481,7 @@ window.plotAlumniOnMap = async function(data) {
 };
 
 // ==========================================
-// 🪪 DIGITAL ID CARD GENERATOR LOGIC (WITH QR CODE)
+// 🪪 DIGITAL ID CARD GENERATOR LOGIC 
 // ==========================================
 window.generateIDCard = function(name, photo, uni, dept, batch, admitted, buttonElement) {
     const originalText = buttonElement.innerHTML;
@@ -493,34 +489,30 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
     buttonElement.disabled = true;
     buttonElement.style.opacity = "0.7";
 
-    // 1. Populate text data
     document.getElementById('id-card-name').textContent = name;
     document.getElementById('id-card-uni').textContent = uni;
     document.getElementById('id-card-dept').textContent = dept;
     document.getElementById('id-card-batch').textContent = batch;
     document.getElementById('id-card-admitted').textContent = admitted;
     
-    // 2. Generate the QR Code (Formats as a vCard so phones can save it as a contact!)
     const qrContainer = document.getElementById('id-card-qrcode');
-    qrContainer.innerHTML = ""; // Clear any previous QR code
+    qrContainer.innerHTML = ""; 
     
     const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${uni}\nNOTE:Dept: ${dept} | Batch: ${batch}\nEND:VCARD`;
     
- new QRCode(qrContainer, {
+    new QRCode(qrContainer, {
         text: vCardData,
-        width: 45,  // Make sure this is 45
-        height: 45, // Make sure this is 45
+        width: 45,  
+        height: 45, 
         colorDark : "#004aad", 
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.L
     });
 
-    // 3. Handle the Profile Photo
     const photoElement = document.getElementById('id-card-photo');
     photoElement.src = photo;
 
     photoElement.onload = function() {
-        // Adding a tiny 100ms delay to ensure the QR code canvas finishes drawing
         setTimeout(takeScreenshotAndDownload, 100);
     };
     
@@ -533,7 +525,6 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
         setTimeout(takeScreenshotAndDownload, 100);
     }
 
-    // 4. Capture and Download
     function takeScreenshotAndDownload() {
         const cardTemplate = document.getElementById('id-card-template');
 
@@ -570,44 +561,36 @@ window.generateIDCard = function(name, photo, uni, dept, batch, admitted, button
 };
 
 // =========================================
-// 📸 MEMORY VAULT MODAL LOGIC
+// 📸 GLOBAL MEMORY VAULT MODAL LOGIC
 // =========================================
 
-// Event listener for opening/closing the vault modal
 document.addEventListener("DOMContentLoaded", () => {
     const vaultModal = document.getElementById('memoryVaultModal');
     const closeVaultBtn = document.getElementById('closeVaultModal');
+    const openGlobalVaultBtn = document.getElementById('openGlobalVaultBtn');
 
-    // 1. Close the modal when clicking the 'X'
+    // 1. Open Modal from the new big global button
+    if (openGlobalVaultBtn && vaultModal) {
+        openGlobalVaultBtn.addEventListener('click', () => {
+            const subtitle = document.getElementById('vaultSubtitle');
+            if (subtitle) {
+                subtitle.innerText = "Nostalgic moments from our alumni community!";
+            }
+            vaultModal.style.display = 'flex';
+        });
+    }
+
+    // 2. Close the modal when clicking the 'X'
     if (closeVaultBtn) {
         closeVaultBtn.addEventListener('click', () => {
             vaultModal.style.display = 'none';
         });
     }
 
-    // 2. Close the modal when clicking outside the box (on the dark overlay)
+    // 3. Close the modal when clicking outside the box
     window.addEventListener('click', (e) => {
         if (e.target === vaultModal) {
             vaultModal.style.display = 'none';
         }
     });
 });
-
-// 3. The function to actually open the vault and set the title
-window.openMemoryVault = function(name, batch) {
-    const vaultModal = document.getElementById('memoryVaultModal');
-    const subtitle = document.getElementById('vaultSubtitle');
-    
-    if (subtitle) {
-        // Personalize the title based on who they clicked
-        subtitle.innerText = `Throwback moments from ${name} (Batch ${batch})`;
-    }
-    
-    // Display the modal using flexbox to keep it centered
-    if(vaultModal) {
-        vaultModal.style.display = 'flex';
-    }
-    
-    // Note: Later, we will add the code right here to actually fetch 
-    // the specific photos/stories from your JSON/Google Sheets!
-};
