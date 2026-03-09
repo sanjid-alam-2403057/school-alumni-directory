@@ -492,12 +492,13 @@ window.plotAlumniOnMap = async function(data) {
                 </div>
             `;
 
-            marker.bindPopup(popupContent, {
-                maxWidth: 220,     
-                minWidth: 140,     
-                autoPanPaddingTopLeft: [50, 50], 
-                autoPanPaddingBottomRight: [50, 50]
-            });
+        marker.bindPopup(popupContent, {
+                maxWidth: 220,     
+                minWidth: 140,     
+                autoPanPaddingTopLeft: [50, 50], 
+                autoPanPaddingBottomRight: [50, 50],
+                autoPan: false
+            });
 
             markersGroup.addLayer(marker);
         }
