@@ -43,6 +43,21 @@
       "location": "Chittagong, Bangladesh",
       "isPublic": true
   },
+     {
+    "name": "Arib Rahman Eram ",
+    "university": "Southern University Bangladesh",
+    "department": "Civil",
+    "admissionYear": 2023,
+    "sscBatch": 2019,
+    "photo": "images/yasin.jpeg",
+   "emailUser": "aribrahman99", 
+    "emailDomain": "gmail.com",
+    "whatsappCode": "880",
+    "whatsappNum": "1887531299",
+      "mentoring": true,
+       "location": "Chattogram, Bangladesh"
+  },
+
    {
     "name": "Md Yasin Arafat",
     "university": "Comilla University",
